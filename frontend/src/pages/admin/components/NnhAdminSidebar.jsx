@@ -1,6 +1,6 @@
-import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { useAdminTheme } from '../../../hooks/useAdminTheme';
 
 const navItems = [
   { to: '/admin/dashboard', icon: 'dashboard', label: 'Tổng quan' },
@@ -17,6 +17,7 @@ const navItems = [
 ];
 
 export default function NnhAdminSidebar() {
+  const isDark = useAdminTheme();
   const { logout } = useAuth();
   const navigate = useNavigate();
 
@@ -26,15 +27,15 @@ export default function NnhAdminSidebar() {
   };
 
   return (
-    <aside className="fixed left-0 top-0 h-full flex flex-col bg-slate-900 text-slate-400 font-['Space_Grotesk'] text-sm tracking-tight w-64 border-r border-slate-800 shadow-2xl shadow-blue-900/20 z-50">
+    <aside className={`fixed left-0 top-0 h-full flex flex-col ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-lg'} text-sm tracking-tight w-64 border-r transition-colors duration-300 z-50 font-['Space_Grotesk']`}>
       <div className="p-6">
         <div className="flex items-center gap-3 mb-10">
           <div className="w-10 h-10 bg-blue-600 rounded flex items-center justify-center">
             <span className="material-symbols-outlined text-white">rocket_launch</span>
           </div>
           <div>
-            <h1 className="text-xl font-bold tracking-tighter text-white">Zenith Ztore</h1>
-            <p className="text-[10px] uppercase tracking-widest text-slate-500">Admin Console</p>
+            <h1 className={`text-xl font-bold tracking-tighter ${isDark ? 'text-white' : 'text-slate-900'}`}>Zenith Ztore</h1>
+            <p className={`text-[10px] uppercase tracking-widest ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>Admin Console</p>
           </div>
         </div>
         
@@ -48,7 +49,7 @@ export default function NnhAdminSidebar() {
                 `flex items-center gap-3 px-4 py-3 font-semibold transition-all duration-200 ${
                   isActive 
                     ? 'bg-blue-600/10 text-blue-400 border-r-2 border-blue-500' 
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                    : `${isDark ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'}`
                 }`
               }
             >
@@ -59,7 +60,7 @@ export default function NnhAdminSidebar() {
         </nav>
       </div>
       
-      <div className="mt-auto p-6 space-y-1 border-t border-slate-800">
+      <div className={`mt-auto p-6 space-y-1 border-t ${isDark ? 'border-slate-800' : 'border-slate-100'}`}>
         <button onClick={handleLogout} className="w-full flex items-center justify-center gap-3 px-4 py-3 text-white bg-rose-600 hover:bg-rose-500 rounded-lg transition-all duration-200 font-bold active:scale-95">
           <span className="material-symbols-outlined text-[20px]">logout</span>
           <span>Đăng xuất</span>

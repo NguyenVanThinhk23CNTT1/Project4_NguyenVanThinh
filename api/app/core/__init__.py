@@ -1,5 +1,4 @@
 from flask import Flask
-from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from flask_restful import Api
 from app.core.config import get_config
@@ -15,9 +14,10 @@ def create_app(config_name=None):
     config = get_config(config_name)
     app.config.from_object(config)
 
+    from app.extensions import db, jwt
     # Initialize extensions
     CORS(app, origins=config.CORS_ORIGINS)
-    JWTManager(app)
+    jwt.init_app(app)
 
     # Register middleware
     register_middleware(app)
@@ -85,9 +85,10 @@ def register_resources(api):
     api.add_resource(ThuocTinhResource, '/api/tta_thuoctinh/<int:ma>')
 
     # GiaTriThuocTinh resources
-    from app.modules.tta_giatrithuoctinh.tta_giatrithuoctinh_resource import GiaTriThuocTinhListResource, GiaTriThuocTinhResource
+    from app.modules.tta_giatrithuoctinh.tta_giatrithuoctinh_resource import GiaTriThuocTinhListResource, GiaTriThuocTinhResource, GiaTriThuocTinhProductResource
     api.add_resource(GiaTriThuocTinhListResource, '/api/tta_giatrithuoctinh')
     api.add_resource(GiaTriThuocTinhResource, '/api/tta_giatrithuoctinh/<int:id>')
+    api.add_resource(GiaTriThuocTinhProductResource, '/api/tta_giatrithuoctinh/product/<int:ma_sp>')
 
     # DanhMucThuocTinh resources
     from app.modules.tta_danhmuc_thuoctinh.tta_danhmuc_thuoctinh_resource import DanhMucThuocTinhListResource, DanhMucThuocTinhResource, ProductAttributeResource
@@ -109,6 +110,14 @@ def register_resources(api):
     from app.modules.tta_voucher.tta_voucher_resource import VoucherListResource, VoucherResource
     api.add_resource(VoucherListResource, '/api/tta_voucher')
     api.add_resource(VoucherResource, '/api/tta_voucher/<int:id>')
+
+    # Dashboard resources
+    from app.modules.tta_dashboard.dashboard_resource import DashboardResource
+    api.add_resource(DashboardResource, '/api/dashboard')
+
+    # Upload resources
+    from app.modules.tta_upload.upload_resource import UploadResource
+    api.add_resource(UploadResource, '/api/upload')
 
     # TODO: Register other resources as they are refactored
     

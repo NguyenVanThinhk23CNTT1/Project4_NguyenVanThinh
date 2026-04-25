@@ -33,3 +33,10 @@ class GiaTriThuocTinhResource(Resource):
     def delete(self, id):
         service.delete_value(id)
         return response_success(message="Xóa giá trị thuộc tính thành công.")
+
+class GiaTriThuocTinhProductResource(Resource):
+    @jwt_required()
+    @admin_required
+    def get(self, ma_sp):
+        data = service.get_values_by_product(ma_sp)
+        return response_success(data=data)

@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, Integer, String, Numeric, Text, DateTime, Date, ForeignKey, MetaData
+from sqlalchemy import Table, Column, Integer, String, Numeric, Text, DateTime, Date, ForeignKey, MetaData, Unicode, UnicodeText
 from datetime import datetime
 
 metadata = MetaData()
@@ -10,7 +10,7 @@ metadata = MetaData()
 user = Table(
     'G5_user', metadata,
     Column('G5_MaNguoiDung', Integer, primary_key=True, autoincrement=True),
-    Column('G5_HoTen', String(255)),
+    Column('G5_HoTen', Unicode(255)),
     Column('G5_Email', String(255), unique=True),
     Column('G5_SDT', String(20)),
     Column('G5_NgaySinh', Date),
@@ -19,7 +19,7 @@ user = Table(
     Column('G5_NgayDangKy', DateTime, default=datetime.utcnow),
     Column('G5_ResetToken', String(255)),
     Column('G5_ResetTokenExpiry', DateTime),
-    Column('G5_AvatarUrl', Text),
+    Column('G5_AvatarUrl', UnicodeText),
     Column('G5_IsDeleted', Integer, default=0),
     Column('G5_DeletedAt', DateTime),
     Column('G5_DeletedBy', Integer),
@@ -31,8 +31,8 @@ user = Table(
 danhmuc = Table(
     'G5_danhmuc', metadata,
     Column('G5_MaDanhMuc', Integer, primary_key=True, autoincrement=True),
-    Column('G5_TenDanhMuc', String(255), nullable=False),
-    Column('G5_MoTa', Text),
+    Column('G5_TenDanhMuc', Unicode(255), nullable=False),
+    Column('G5_MoTa', UnicodeText),
     Column('G5_IsDeleted', Integer, default=0),
     Column('G5_DeletedAt', DateTime),
     Column('G5_DeletedBy', Integer),
@@ -45,19 +45,19 @@ danhmuc = Table(
 sanpham = Table(
     'G5_sanpham', metadata,
     Column('G5_MaSanPham', Integer, primary_key=True, autoincrement=True),
-    Column('G5_TenSanPham', String(255), nullable=False),
+    Column('G5_TenSanPham', Unicode(255), nullable=False),
     Column('G5_MaDanhMuc', Integer, ForeignKey('G5_danhmuc.G5_MaDanhMuc')),
     Column('G5_GiaGoc', Numeric(18, 2)),
-    Column('G5_MoTa', Text),
-    Column('G5_HinhAnh', String(500)),
+    Column('G5_MoTa', UnicodeText),
+    Column('G5_HinhAnh', Unicode(500)),
     Column('G5_SoLuongTon', Integer, default=0),
     Column('G5_TrangThai', Integer, default=1),
     Column('G5_NgayThem', DateTime, default=datetime.utcnow),
     Column('G5_Loai', String(100)),
     Column('G5_GiaBan', Numeric(18, 2)),
-    Column('G5_ThuongHieu', String(255)),
-    Column('G5_XuatXu', String(255)),
-    Column('G5_BaoHanh', String(100)),
+    Column('G5_ThuongHieu', Unicode(255)),
+    Column('G5_XuatXu', Unicode(255)),
+    Column('G5_BaoHanh', Unicode(100)),
     Column('G5_IsDeleted', Integer, default=0),
     Column('G5_DeletedAt', DateTime),
     Column('G5_DeletedBy', Integer),
@@ -75,10 +75,10 @@ donhang = Table(
     Column('G5_NgayDatHang', DateTime, default=datetime.utcnow),
     Column('G5_TongTien', Numeric(18, 2), nullable=False),
     Column('G5_TrangThai', String(50), default='pending'),
-    Column('G5_DiaChiNguoiNhan', String(255)),
+    Column('G5_DiaChiNguoiNhan', Unicode(255)),
     Column('G5_EmailNguoiNhan', String(255)),
-    Column('G5_GhiChu', Text),
-    Column('G5_HoTenNguoiNhan', String(255)),
+    Column('G5_GhiChu', UnicodeText),
+    Column('G5_HoTenNguoiNhan', Unicode(255)),
     Column('G5_SoDienThoaiNguoiNhan', String(20)),
     Column('G5_PhuongThucThanhToan', String(50)),
     Column('G5_TrangThaiThanhToan', String(50)),
@@ -103,7 +103,7 @@ chitietdonhang = Table(
 thuoctinh = Table(
     'G5_thuoctinh', metadata,
     Column('G5_ThuocTinhID', Integer, primary_key=True, autoincrement=True),
-    Column('G5_TenThuocTinh', String(255), nullable=False),
+    Column('G5_TenThuocTinh', Unicode(255), nullable=False),
     Column('G5_IsDeleted', Integer, default=0),
     Column('G5_DeletedAt', DateTime),
     Column('G5_DeletedBy', Integer),
@@ -117,7 +117,7 @@ giatrithuoctinh = Table(
     Column('G5_GiaTriID', Integer, primary_key=True, autoincrement=True),
     Column('G5_MaSanPham', Integer, ForeignKey('G5_sanpham.G5_MaSanPham')),
     Column('G5_ThuocTinhID', Integer, ForeignKey('G5_thuoctinh.G5_ThuocTinhID')),
-    Column('G5_GiaTri', String(255), nullable=False),
+    Column('G5_GiaTri', Unicode(255), nullable=False),
 )
 
 # Table G5_danhmuc_thuoctinh
@@ -140,7 +140,7 @@ danhgia = Table(
     Column('G5_MaSanPham', Integer, ForeignKey('G5_sanpham.G5_MaSanPham')),
     Column('G5_MaNguoiDung', Integer, ForeignKey('G5_user.G5_MaNguoiDung')),
     Column('G5_SoSao', Integer),
-    Column('G5_BinhLuan', Text),
+    Column('G5_BinhLuan', UnicodeText),
     Column('G5_NgayDanhGia', DateTime, default=datetime.utcnow),
 )
 
@@ -155,14 +155,14 @@ voucher = Table(
     Column('G5_CategoryIds', Text),
     Column('G5_Code', String(100), unique=True),
     Column('G5_CreatedAt', DateTime, default=datetime.utcnow),
-    Column('G5_Description', Text),
+    Column('G5_Description', UnicodeText),
     Column('G5_DiscountType', String(50)), # percent, fixed
     Column('G5_DiscountValue', Numeric(18, 2)),
     Column('G5_EndDate', DateTime),
     Column('G5_UserIdCreate', Integer, ForeignKey('G5_user.G5_MaNguoiDung')),
     Column('G5_MaxDiscount', Numeric(18, 2)),
     Column('G5_MinOrderValue', Numeric(18, 2)),
-    Column('G5_Name', String(255)),
+    Column('G5_Name', Unicode(255)),
     Column('G5_ProductIds', Text),
     Column('G5_StartDate', DateTime),
     Column('G5_Status', String(50), default='active'),

@@ -10,7 +10,7 @@ def authenticate_user(email, password):
     user = dict(user_row._mapping)
         
     token = create_access_token(
-        identity=user['G5_MaNguoiDung'],
+        identity=str(user['G5_MaNguoiDung']),  # JWT-Extended 4.x yêu cầu identity là string
         additional_claims={
             "email": user['G5_Email'],
             "vai_tro": user['G5_VaiTro']

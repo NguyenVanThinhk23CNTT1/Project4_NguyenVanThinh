@@ -24,6 +24,7 @@ def get_all(params=None):
             items.append({
                 "MaSanPham": row_dict['G5_MaSanPham'],
                 "TenSanPham": row_dict['G5_TenSanPham'],
+                "MaDanhMuc": row_dict['G5_MaDanhMuc'],
                 "TenDanhMuc": row_dict['G5_TenDanhMuc'],
                 "Gia": float(row_dict['G5_GiaGoc']) if row_dict['G5_GiaGoc'] else 0,
                 "GiaBan": float(row_dict['G5_GiaBan']) if row_dict['G5_GiaBan'] else 0,
@@ -50,6 +51,7 @@ def get_by_id(ma_sp):
         return {
             "MaSanPham": row_dict['G5_MaSanPham'],
             "TenSanPham": row_dict['G5_TenSanPham'],
+            "MaDanhMuc": row_dict['G5_MaDanhMuc'],
             "TenDanhMuc": row_dict['G5_TenDanhMuc'],
             "Gia": float(row_dict['G5_GiaGoc']) if row_dict['G5_GiaGoc'] else 0,
             "GiaBan": float(row_dict['G5_GiaBan']) if row_dict['G5_GiaBan'] else 0,
@@ -58,14 +60,34 @@ def get_by_id(ma_sp):
             "HinhAnh": row_dict['G5_HinhAnh']
         }
 
+def _map_to_db(data):
+    mapping = {
+        "TenSanPham": "G5_TenSanPham",
+        "MaDanhMuc": "G5_MaDanhMuc",
+        "GiaGoc": "G5_GiaGoc",
+        "Gia": "G5_GiaGoc", # Ánh xạ thêm để an toàn
+        "GiaBan": "G5_GiaBan",
+        "SoLuongTon": "G5_SoLuongTon",
+        "MoTa": "G5_MoTa",
+        "HinhAnh": "G5_HinhAnh",
+        "TrangThai": "G5_TrangThai",
+        "ThuongHieu": "G5_ThuongHieu",
+        "XuatXu": "G5_XuatXu",
+        "BaoHanh": "G5_BaoHanh",
+        "Loai": "G5_Loai"
+    }
+    return {mapping[k]: v for k, v in data.items() if k in mapping}
+
 def create(data):
-    stmt = insert(sanpham).values(**data)
+    db_data = _map_to_db(data)
+    stmt = insert(sanpham).values(**db_data)
     with engine.connect() as conn:
         conn.execute(stmt)
         conn.commit()
 
 def update_product(ma_sp, data):
-    stmt = update(sanpham).where(sanpham.c.G5_MaSanPham == ma_sp).values(**data)
+    db_data = _map_to_db(data)
+    stmt = update(sanpham).where(sanpham.c.G5_MaSanPham == ma_sp).values(**db_data)
     with engine.connect() as conn:
         conn.execute(stmt)
         conn.commit()

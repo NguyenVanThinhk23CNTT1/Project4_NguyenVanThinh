@@ -4,8 +4,8 @@ class SanPhamCreateSchema(Schema):
     """Schema for creating a product"""
     TenSanPham = fields.Str(required=True, validate=validate.Length(min=1, max=255))
     MaDanhMuc = fields.Int(required=True)
-    GiaGoc = fields.Decimal(required=True, as_string=True)
-    GiaBan = fields.Decimal(required=True, as_string=True)
+    GiaGoc = fields.Decimal()
+    GiaBan = fields.Decimal()
     SoLuongTon = fields.Int(required=True, validate=validate.Range(min=0))
     MoTa = fields.Str(allow_none=True)
     HinhAnh = fields.Str(allow_none=True)
@@ -15,8 +15,8 @@ class SanPhamUpdateSchema(Schema):
     """Schema for updating a product"""
     TenSanPham = fields.Str(validate=validate.Length(min=1, max=255))
     MaDanhMuc = fields.Int()
-    GiaGoc = fields.Decimal(as_string=True)
-    GiaBan = fields.Decimal(as_string=True)
+    GiaGoc = fields.Decimal()
+    GiaBan = fields.Decimal()
     SoLuongTon = fields.Int(validate=validate.Range(min=0))
     MoTa = fields.Str(allow_none=True)
     HinhAnh = fields.Str(allow_none=True)
@@ -55,7 +55,7 @@ class NguoiDungUpdateSchema(Schema):
 class LoginSchema(Schema):
     """Schema for login"""
     email = fields.Email(required=True)
-    password = fields.Str(required=True, validate=validate.Length(min=6))
+    password = fields.Str(required=True, validate=validate.Length(min=1))
 
 class DonHangCreateSchema(Schema):
     """Schema for creating an order"""
@@ -81,7 +81,7 @@ def validate_schema(schema_class):
                 request.validated_data = validated_data
                 return f(*args, **kwargs)
             except ValidationError as err:
-                return response_error(message="Validation error", status=400)
+                return response_error(message=err.messages, status=400)
 
         return decorated_function
     return decorator
