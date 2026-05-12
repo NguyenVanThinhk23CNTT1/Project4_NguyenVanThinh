@@ -114,12 +114,12 @@ export default function NnhSanPhamSua() {
       if (typeof errorMsg === 'object') {
         detailedMsg = Object.entries(errorMsg)
           .map(([key, val]) => `${key}: ${val}`)
-          .join('\n');
+          .join('\\n');
       } else {
         detailedMsg = errorMsg || "Lỗi không xác định";
       }
         
-      alert("Lỗi khi cập nhật sản phẩm!\n" + detailedMsg);
+      alert("Lỗi khi cập nhật sản phẩm!\\n" + detailedMsg);
     } finally {
       setSubmitting(false);
     }

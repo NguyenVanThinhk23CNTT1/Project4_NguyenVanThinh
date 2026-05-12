@@ -112,7 +112,7 @@ export default function NnhSanPhamChiTiet() {
                 <h3 className={`text-sm font-bold ${isDark ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-widest mb-4`}>Mô tả sản phẩm</h3>
                 <div className={`${isDark ? 'text-slate-300' : 'text-slate-600'} leading-relaxed space-y-4 text-sm`}>
                   {product.MoTa ? (
-                    product.MoTa.split('\n').map((line, i) => <p key={i}>{line}</p>)
+                    product.MoTa.split('\\n').map((line, i) => <p key={i}>{line}</p>)
                   ) : (
                     <p className="italic text-slate-500 text-sm">Chưa có thông tin mô tả chi tiết cho sản phẩm này.</p>
                   )}

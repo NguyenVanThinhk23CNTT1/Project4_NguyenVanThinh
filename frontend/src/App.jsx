@@ -49,6 +49,38 @@ import NnhDanhGiaList from './pages/admin/nnh_danhgia/nnh_danhgia_list';
 import NnhVoucherList from './pages/admin/nnh_voucher/nnh_voucher_list';
 import NnhVoucherThem from './pages/admin/nnh_voucher/nnh_voucher_them';
 
+import NnhThueSanPhamList from './pages/admin/nnh_thue_sanpham/nnh_thue_sanpham_list';
+import NnhThueSanPhamThem from './pages/admin/nnh_thue_sanpham/nnh_thue_sanpham_them';
+import NnhThueSanPhamSua from './pages/admin/nnh_thue_sanpham/nnh_thue_sanpham_sua';
+import NnhThueDonHangList from './pages/admin/nnh_thue_donhang/nnh_thue_donhang_list';
+import NnhThueDonHangThem from './pages/admin/nnh_thue_donhang/nnh_thue_donhang_them';
+import NnhThueDonHangSua from './pages/admin/nnh_thue_donhang/nnh_thue_donhang_sua';
+import NnhThueChiTietList from './pages/admin/nnh_thue_chitiet/nnh_thue_chitiet_list';
+import NnhThueChiTietThem from './pages/admin/nnh_thue_chitiet/nnh_thue_chitiet_them';
+import NnhThueChiTietSua from './pages/admin/nnh_thue_chitiet/nnh_thue_chitiet_sua';
+import NnhThueLichSuList from './pages/admin/nnh_thue_lichsu/nnh_thue_lichsu_list';
+import NnhThueLichSuThem from './pages/admin/nnh_thue_lichsu/nnh_thue_lichsu_them';
+import NnhThueLichSuSua from './pages/admin/nnh_thue_lichsu/nnh_thue_lichsu_sua';
+
+import NnhDichVuTuVanList from './pages/admin/nnh_dichvu_tuvan/nnh_dichvu_tuvan_list';
+import NnhDichVuTuVanThem from './pages/admin/nnh_dichvu_tuvan/nnh_dichvu_tuvan_them';
+import NnhDichVuTuVanSua from './pages/admin/nnh_dichvu_tuvan/nnh_dichvu_tuvan_sua';
+import NnhLichTuVanList from './pages/admin/nnh_lich_tuvan/nnh_lich_tuvan_list';
+import NnhLichTuVanThem from './pages/admin/nnh_lich_tuvan/nnh_lich_tuvan_them';
+import NnhLichTuVanSua from './pages/admin/nnh_lich_tuvan/nnh_lich_tuvan_sua';
+import NnhLichNhanVienList from './pages/admin/nnh_lich_tuvan_nhanvien/nnh_lich_tuvan_nhanvien_list';
+import NnhLichNhanVienThem from './pages/admin/nnh_lich_tuvan_nhanvien/nnh_lich_tuvan_nhanvien_them';
+import NnhLichNhanVienSua from './pages/admin/nnh_lich_tuvan_nhanvien/nnh_lich_tuvan_nhanvien_sua';
+import NnhSanPhamHinhAnhList from './pages/admin/nnh_sanpham_hinhanh/nnh_sanpham_hinhanh_list';
+import NnhSanPhamHinhAnhThem from './pages/admin/nnh_sanpham_hinhanh/nnh_sanpham_hinhanh_them';
+import NnhSanPhamHinhAnhSua from './pages/admin/nnh_sanpham_hinhanh/nnh_sanpham_hinhanh_sua';
+import NnhUserVoucherList from './pages/admin/nnh_user_voucher/nnh_user_voucher_list';
+import NnhUserVoucherThem from './pages/admin/nnh_user_voucher/nnh_user_voucher_them';
+import NnhUserVoucherSua from './pages/admin/nnh_user_voucher/nnh_user_voucher_sua';
+import NnhGioHangTamList from './pages/admin/nnh_giohang_tam/nnh_giohang_tam_list';
+import NnhGioHangTamThem from './pages/admin/nnh_giohang_tam/nnh_giohang_tam_them';
+import NnhGioHangTamSua from './pages/admin/nnh_giohang_tam/nnh_giohang_tam_sua';
+
 export default function App() {
   return (
     <AuthProvider>
@@ -103,6 +135,38 @@ export default function App() {
             <Route path="danh-gia"            element={<NnhDanhGiaList />} />
             <Route path="voucher"             element={<NnhVoucherList />} />
             <Route path="voucher/them"        element={<NnhVoucherThem />} />
+
+            <Route path="sanpham-thue" element={<NnhThueSanPhamList />} />
+            <Route path="sanpham-thue/them" element={<NnhThueSanPhamThem />} />
+            <Route path="sanpham-thue/edit/:id" element={<NnhThueSanPhamSua />} />
+            <Route path="donhang-thue" element={<NnhThueDonHangList />} />
+            <Route path="donhang-thue/them" element={<NnhThueDonHangThem />} />
+            <Route path="donhang-thue/edit/:id" element={<NnhThueDonHangSua />} />
+            <Route path="chitiet-thue" element={<NnhThueChiTietList />} />
+            <Route path="chitiet-thue/them" element={<NnhThueChiTietThem />} />
+            <Route path="chitiet-thue/edit/:id" element={<NnhThueChiTietSua />} />
+            <Route path="lichsu-thue" element={<NnhThueLichSuList />} />
+            <Route path="lichsu-thue/them" element={<NnhThueLichSuThem />} />
+            <Route path="lichsu-thue/edit/:id" element={<NnhThueLichSuSua />} />
+
+            <Route path="dichvu-tuvan" element={<NnhDichVuTuVanList />} />
+            <Route path="dichvu-tuvan/them" element={<NnhDichVuTuVanThem />} />
+            <Route path="dichvu-tuvan/edit/:id" element={<NnhDichVuTuVanSua />} />
+            <Route path="lich-tuvan" element={<NnhLichTuVanList />} />
+            <Route path="lich-tuvan/them" element={<NnhLichTuVanThem />} />
+            <Route path="lich-tuvan/edit/:id" element={<NnhLichTuVanSua />} />
+            <Route path="lich-nhanvien" element={<NnhLichNhanVienList />} />
+            <Route path="lich-nhanvien/them" element={<NnhLichNhanVienThem />} />
+            <Route path="lich-nhanvien/edit/:id" element={<NnhLichNhanVienSua />} />
+            <Route path="sanpham-hinhanh" element={<NnhSanPhamHinhAnhList />} />
+            <Route path="sanpham-hinhanh/them" element={<NnhSanPhamHinhAnhThem />} />
+            <Route path="sanpham-hinhanh/edit/:id" element={<NnhSanPhamHinhAnhSua />} />
+            <Route path="user-voucher" element={<NnhUserVoucherList />} />
+            <Route path="user-voucher/them" element={<NnhUserVoucherThem />} />
+            <Route path="user-voucher/edit/:id" element={<NnhUserVoucherSua />} />
+            <Route path="giohang-tam" element={<NnhGioHangTamList />} />
+            <Route path="giohang-tam/them" element={<NnhGioHangTamThem />} />
+            <Route path="giohang-tam/edit/:id" element={<NnhGioHangTamSua />} />
           </Route>
 
           {/* Catch-all route */}

@@ -2,18 +2,48 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { useAdminTheme } from '../../../hooks/useAdminTheme';
 
-const navItems = [
-  { to: '/admin/dashboard', icon: 'dashboard', label: 'Tổng quan' },
-  { to: '/admin/danh-muc',  icon: 'folder', label: 'Danh mục' },
-  { to: '/admin/san-pham',  icon: 'inventory_2', label: 'Sản phẩm' },
-  { to: '/admin/user',      icon: 'group', label: 'Người dùng' },
-  { to: '/admin/don-hang',  icon: 'local_shipping', label: 'Đơn hàng' },
-  { to: '/admin/chi-tiet',  icon: 'receipt_long', label: 'Chi tiết đơn hàng' },
-  { to: '/admin/thuoc-tinh', icon: 'sell', label: 'Thuộc tính' },
-  { to: '/admin/danhmuc-thuoctinh', icon: 'link', label: 'Thông số theo danh mục' },
-  { to: '/admin/giatri-thuoctinh', icon: 'settings', label: 'Giá trị thuộc tính' },
-  { to: '/admin/danh-gia', icon: 'rate_review', label: 'Đánh giá' },
-  { to: '/admin/voucher', icon: 'confirmation_number', label: 'Voucher' },
+const navGroups = [
+  {
+    title: 'QUẢN LÝ CỐT LÕI',
+    items: [
+      { to: '/admin/dashboard', icon: 'dashboard', label: 'Tổng quan' },
+      { to: '/admin/danh-muc',  icon: 'folder', label: 'Danh mục' },
+      { to: '/admin/san-pham',  icon: 'inventory_2', label: 'Sản phẩm' },
+      { to: '/admin/user',      icon: 'group', label: 'Người dùng' },
+      { to: '/admin/don-hang',  icon: 'local_shipping', label: 'Đơn hàng' },
+      { to: '/admin/chi-tiet',  icon: 'receipt_long', label: 'Chi tiết đơn hàng' },
+      { to: '/admin/thuoc-tinh', icon: 'sell', label: 'Thuộc tính' },
+      { to: '/admin/danhmuc-thuoctinh', icon: 'link', label: 'Thông số theo danh mục' },
+      { to: '/admin/giatri-thuoctinh', icon: 'settings', label: 'Giá trị thuộc tính' },
+      { to: '/admin/danh-gia', icon: 'rate_review', label: 'Đánh giá' },
+      { to: '/admin/voucher', icon: 'confirmation_number', label: 'Voucher' },
+    ]
+  },
+  {
+    title: 'THUÊ SẢN PHẨM',
+    items: [
+      { to: '/admin/sanpham-thue', icon: 'event_available', label: 'Sản phẩm thuê' },
+      { to: '/admin/donhang-thue', icon: 'shopping_bag', label: 'Đơn hàng thuê' },
+      { to: '/admin/chitiet-thue', icon: 'receipt', label: 'Chi tiết đơn hàng thuê' },
+      { to: '/admin/lichsu-thue', icon: 'history', label: 'Lịch sử thuê' },
+    ]
+  },
+  {
+    title: 'DỊCH VỤ & TƯ VẤN',
+    items: [
+      { to: '/admin/dichvu-tuvan', icon: 'support_agent', label: 'Dịch vụ tư vấn' },
+      { to: '/admin/lich-tuvan', icon: 'calendar_month', label: 'Lịch tư vấn' },
+      { to: '/admin/lich-nhanvien', icon: 'event_note', label: 'Lịch nhân viên' },
+    ]
+  },
+  {
+    title: 'QUẢN LÝ KHÁC',
+    items: [
+      { to: '/admin/sanpham-hinhanh', icon: 'imagesmode', label: 'Hình ảnh sản phẩm' },
+      { to: '/admin/user-voucher', icon: 'loyalty', label: 'Voucher người dùng' },
+      { to: '/admin/giohang-tam', icon: 'shopping_cart', label: 'Giỏ hàng tạm' },
+    ]
+  }
 ];
 
 export default function NnhAdminSidebar() {
@@ -28,9 +58,9 @@ export default function NnhAdminSidebar() {
 
   return (
     <aside className={`fixed left-0 top-0 h-full flex flex-col ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-lg'} text-sm tracking-tight w-64 border-r transition-colors duration-300 z-50 font-['Space_Grotesk']`}>
-      <div className="p-6">
-        <div className="flex items-center gap-3 mb-10">
-          <div className="w-10 h-10 bg-blue-600 rounded flex items-center justify-center">
+      <div className="p-6 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 80px)' }}>
+        <div className="flex items-center gap-3 mb-8">
+          <div className="w-10 h-10 bg-blue-600 rounded flex items-center justify-center flex-shrink-0">
             <span className="material-symbols-outlined text-white">rocket_launch</span>
           </div>
           <div>
@@ -39,23 +69,31 @@ export default function NnhAdminSidebar() {
           </div>
         </div>
         
-        <nav className="space-y-1">
-          <div className="text-[10px] font-bold text-slate-500 mb-4 px-4 tracking-widest uppercase">MENU</div>
-          {navItems.map((item) => (
-            <NavLink 
-              key={item.to} 
-              to={item.to} 
-              className={({ isActive }) => 
-                `flex items-center gap-3 px-4 py-3 font-semibold transition-all duration-200 ${
-                  isActive 
-                    ? 'bg-blue-600/10 text-blue-400 border-r-2 border-blue-500' 
-                    : `${isDark ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'}`
-                }`
-              }
-            >
-              <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
-              <span>{item.label}</span>
-            </NavLink>
+        <nav className="space-y-6">
+          {navGroups.map((group, groupIdx) => (
+            <div key={groupIdx}>
+              <div className="text-[10px] font-bold text-slate-500 mb-2 px-4 tracking-widest uppercase">
+                {group.title}
+              </div>
+              <div className="space-y-1">
+                {group.items.map((item) => (
+                  <NavLink 
+                    key={item.to} 
+                    to={item.to} 
+                    className={({ isActive }) => 
+                      `flex items-center gap-3 px-4 py-2.5 font-semibold transition-all duration-200 ${
+                        isActive 
+                          ? 'bg-blue-600/10 text-blue-400 border-r-2 border-blue-500' 
+                          : `${isDark ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'}`
+                      }`
+                    }
+                  >
+                    <span className="material-symbols-outlined text-[18px]">{item.icon}</span>
+                    <span>{item.label}</span>
+                  </NavLink>
+                ))}
+              </div>
+            </div>
           ))}
         </nav>
       </div>

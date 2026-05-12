@@ -111,6 +111,42 @@ def register_resources(api):
     api.add_resource(VoucherListResource, '/api/tta_voucher')
     api.add_resource(VoucherResource, '/api/tta_voucher/<int:id>')
 
+
+    # Thue resources
+    from app.modules.tta_sanpham_thue.tta_sanpham_thue_resource import SanPhamThueListResource, SanPhamThueResource
+    api.add_resource(SanPhamThueListResource, '/api/tta_sanpham_thue')
+    api.add_resource(SanPhamThueResource, '/api/tta_sanpham_thue/<int:id>')
+    from app.modules.tta_donhang_thue.tta_donhang_thue_resource import DonHangThueListResource, DonHangThueResource
+    api.add_resource(DonHangThueListResource, '/api/tta_donhang_thue')
+    api.add_resource(DonHangThueResource, '/api/tta_donhang_thue/<int:id>')
+    from app.modules.tta_chitiet_donhang_thue.tta_chitiet_donhang_thue_resource import ChiTietDonHangThueListResource, ChiTietDonHangThueResource
+    api.add_resource(ChiTietDonHangThueListResource, '/api/tta_chitiet_donhang_thue')
+    api.add_resource(ChiTietDonHangThueResource, '/api/tta_chitiet_donhang_thue/<int:id>')
+    from app.modules.tta_lich_su_thue.tta_lich_su_thue_resource import LichSuThueListResource, LichSuThueResource
+    api.add_resource(LichSuThueListResource, '/api/tta_lich_su_thue')
+    api.add_resource(LichSuThueResource, '/api/tta_lich_su_thue/<int:id>')
+
+
+    # Rest modules resources
+    from app.modules.tta_dichvu_tuvan.tta_dichvu_tuvan_resource import DichVuTuVanListResource, DichVuTuVanResource
+    api.add_resource(DichVuTuVanListResource, '/api/tta_dichvu_tuvan')
+    api.add_resource(DichVuTuVanResource, '/api/tta_dichvu_tuvan/<int:id>')
+    from app.modules.tta_lich_tuvan.tta_lich_tuvan_resource import LichTuVanListResource, LichTuVanResource
+    api.add_resource(LichTuVanListResource, '/api/tta_lich_tuvan')
+    api.add_resource(LichTuVanResource, '/api/tta_lich_tuvan/<int:id>')
+    from app.modules.tta_lich_tuvan_nhanvien.tta_lich_tuvan_nhanvien_resource import LichTuVanNhanVienListResource, LichTuVanNhanVienResource
+    api.add_resource(LichTuVanNhanVienListResource, '/api/tta_lich_tuvan_nhanvien')
+    api.add_resource(LichTuVanNhanVienResource, '/api/tta_lich_tuvan_nhanvien/<int:id>')
+    from app.modules.tta_sanpham_hinhanh.tta_sanpham_hinhanh_resource import SanPhamHinhAnhListResource, SanPhamHinhAnhResource
+    api.add_resource(SanPhamHinhAnhListResource, '/api/tta_sanpham_hinhanh')
+    api.add_resource(SanPhamHinhAnhResource, '/api/tta_sanpham_hinhanh/<int:id>')
+    from app.modules.tta_uservoucher.tta_uservoucher_resource import UserVoucherListResource, UserVoucherResource
+    api.add_resource(UserVoucherListResource, '/api/tta_uservoucher')
+    api.add_resource(UserVoucherResource, '/api/tta_uservoucher/<int:id>')
+    from app.modules.tta_giohangtam.tta_giohangtam_resource import GioHangTamListResource, GioHangTamResource
+    api.add_resource(GioHangTamListResource, '/api/tta_giohangtam')
+    api.add_resource(GioHangTamResource, '/api/tta_giohangtam/<int:id>')
+
     # Dashboard resources
     from app.modules.tta_dashboard.dashboard_resource import DashboardResource
     api.add_resource(DashboardResource, '/api/dashboard')
