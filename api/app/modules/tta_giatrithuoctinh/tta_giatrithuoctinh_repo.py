@@ -75,11 +75,26 @@ def create(data):
                 res = conn.execute(check_stmt).fetchone()
                 tt_id = res.G5_ThuocTinhID
 
-        stmt = insert(giatrithuoctinh).values(
-            G5_MaSanPham=ma_sp,
-            G5_ThuocTinhID=tt_id,
-            G5_GiaTri=gia_tri
+        # Check if GiaTri already exists for this MaSanPham and ThuocTinhID
+        check_exist = select(giatrithuoctinh.c.G5_GiaTriID).where(
+            giatrithuoctinh.c.G5_MaSanPham == ma_sp,
+            giatrithuoctinh.c.G5_ThuocTinhID == tt_id
         )
+        existing = conn.execute(check_exist).fetchone()
+        
+        if existing:
+            # Update existing
+            stmt = update(giatrithuoctinh).where(
+                giatrithuoctinh.c.G5_GiaTriID == existing.G5_GiaTriID
+            ).values(G5_GiaTri=gia_tri)
+        else:
+            # Insert new
+            stmt = insert(giatrithuoctinh).values(
+                G5_MaSanPham=ma_sp,
+                G5_ThuocTinhID=tt_id,
+                G5_GiaTri=gia_tri
+            )
+            
         conn.execute(stmt)
         conn.commit()
 

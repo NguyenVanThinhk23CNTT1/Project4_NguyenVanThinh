@@ -29,6 +29,17 @@ export default function TtaDanhMucThuocTinhList() {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (!window.confirm("Bạn có chắc chắn muốn xóa liên kết này không?")) return;
+    try {
+      await danhmucThuoctinhApi.delete(id);
+      fetchData();
+    } catch (err) {
+      console.error("Lỗi khi xóa:", err);
+      alert("Xóa thất bại!");
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -162,7 +173,10 @@ export default function TtaDanhMucThuocTinhList() {
                     </div>
                   </div>
                   <div className="col-span-2 text-right">
-                    <button className={`p-2 rounded-lg transition-all ${isDark ? 'text-slate-600 hover:text-rose-500 hover:bg-rose-500/10' : 'text-slate-400 hover:text-rose-600 hover:bg-rose-50'}`}>
+                    <button 
+                      onClick={() => handleDelete(attr.Id)}
+                      className={`p-2 rounded-lg transition-all ${isDark ? 'text-slate-600 hover:text-rose-500 hover:bg-rose-500/10' : 'text-slate-400 hover:text-rose-600 hover:bg-rose-50'}`}
+                    >
                       <span className="material-symbols-outlined text-lg">close</span>
                     </button>
                   </div>

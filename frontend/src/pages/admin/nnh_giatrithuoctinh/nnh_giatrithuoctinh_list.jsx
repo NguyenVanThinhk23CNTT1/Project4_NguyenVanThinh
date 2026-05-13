@@ -9,6 +9,11 @@ export default function TtaGiaTriThuocTinhList() {
   const [values, setValues] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [expandedRows, setExpandedRows] = useState({});
+
+  const toggleRow = (maSp) => {
+    setExpandedRows(prev => ({...prev, [maSp]: !prev[maSp]}));
+  };
 
   const fetchData = async () => {
     setLoading(true);
@@ -28,9 +33,27 @@ export default function TtaGiaTriThuocTinhList() {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (!window.confirm("Bạn có chắc chắn muốn xóa giá trị thông số này không?")) return;
+    try {
+      await giatrithuoctinhApi.delete(id);
+      fetchData();
+    } catch (err) {
+      console.error("Lỗi khi xóa:", err);
+      alert("Xóa thất bại!");
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
+
+  const groupedValues = values.reduce((acc, curr) => {
+    if (!acc[curr.MaSanPham]) acc[curr.MaSanPham] = [];
+    acc[curr.MaSanPham].push(curr);
+    return acc;
+  }, {});
+  const productsWithValues = products.filter(p => groupedValues[p.MaSanPham]);
 
   if (loading) return (
     <div className={`p-8 min-h-screen flex items-center justify-center ${isDark ? 'bg-slate-950' : 'bg-slate-50'}`}>
@@ -126,44 +149,64 @@ export default function TtaGiaTriThuocTinhList() {
               <thead>
                 <tr className={`${isDark ? 'bg-slate-900/50 border-slate-800' : 'bg-slate-50 border-slate-100'} border-b`}>
                   <th className="px-8 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Sản phẩm</th>
-                  <th className="px-8 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Thuộc tính</th>
-                  <th className="px-8 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Giá trị</th>
+                  <th className="px-8 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Số lượng thông số</th>
                   <th className="px-8 py-5 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-right">Quản lý</th>
                 </tr>
               </thead>
               <tbody className={`divide-y ${isDark ? 'divide-slate-800/50' : 'divide-slate-100'}`}>
-                {values.map((v) => {
-                  const product = products.find(p => p.MaSanPham === v.MaSanPham);
+                {productsWithValues.map((product) => {
+                  const productValues = groupedValues[product.MaSanPham] || [];
+                  const isExpanded = expandedRows[product.MaSanPham];
+
                   return (
-                    <tr key={v.GiaTriID} className={`${isDark ? 'hover:bg-white/[0.02]' : 'hover:bg-slate-50/50'} transition-colors group`}>
-                      <td className="px-8 py-5">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-8 h-8 rounded-lg ${isDark ? 'bg-slate-950 border-slate-800' : 'bg-white border-slate-200'} border flex items-center justify-center`}>
-                            <span className="material-symbols-outlined text-xs text-blue-500">inventory_2</span>
+                    <React.Fragment key={product.MaSanPham}>
+                      <tr className={`${isDark ? 'hover:bg-white/[0.02]' : 'hover:bg-slate-50/50'} ${isExpanded ? (isDark ? 'bg-white/[0.02]' : 'bg-slate-50/50') : ''} transition-colors cursor-pointer group`} onClick={() => toggleRow(product.MaSanPham)}>
+                        <td className="px-8 py-5">
+                          <div className="flex items-center gap-4">
+                            <div className={`w-8 h-8 rounded-lg ${isDark ? 'bg-slate-950 border-slate-800 text-slate-400' : 'bg-white border-slate-200 text-slate-500'} border flex items-center justify-center transition-transform ${isExpanded ? 'rotate-90 text-blue-500' : 'group-hover:text-blue-500'}`}>
+                              <span className="material-symbols-outlined text-sm">chevron_right</span>
+                            </div>
+                            <div>
+                              <p className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>{product.TenSanPham}</p>
+                              <p className="text-[10px] text-slate-500 italic font-medium">{product.TenDanhMuc}</p>
+                            </div>
                           </div>
-                          <div>
-                            <p className={`text-sm font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>{product?.TenSanPham || 'Không xác định'}</p>
-                            <p className="text-[10px] text-slate-500 italic font-medium">{product?.TenDanhMuc}</p>
+                        </td>
+                        <td className="px-8 py-5 text-center">
+                          <span className={`px-3 py-1 rounded-full text-[10px] font-black tracking-widest ${isDark ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-50 text-blue-600'}`}>
+                            {productValues.length} THÔNG SỐ
+                          </span>
+                        </td>
+                        <td className="px-8 py-5 text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            <Link to={`/admin/san-pham/thong-so/${product.MaSanPham}`} onClick={(e) => e.stopPropagation()} className="p-2 text-blue-400 hover:bg-blue-400/10 rounded-lg transition-colors" title="Chỉnh sửa thông số">
+                              <span className="material-symbols-outlined text-lg">edit_note</span>
+                            </Link>
                           </div>
-                        </div>
-                      </td>
-                      <td className="px-8 py-5 text-sm font-bold text-blue-400">{v.TenThuocTinh}</td>
-                      <td className="px-8 py-5">
-                        <span className={`px-4 py-1.5 rounded-xl text-xs font-bold ${isDark ? 'bg-slate-950 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-100 text-slate-600'} border`}>
-                          {v.GiaTri}
-                        </span>
-                      </td>
-                      <td className="px-8 py-5 text-right">
-                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <Link to={`/admin/san-pham/thong-so/${v.MaSanPham}`} className="p-2 text-blue-400 hover:bg-blue-400/10 rounded-lg transition-colors">
-                            <span className="material-symbols-outlined text-lg">edit_note</span>
-                          </Link>
-                          <button className="p-2 text-rose-400 hover:bg-rose-400/10 rounded-lg transition-colors">
-                            <span className="material-symbols-outlined text-lg">delete</span>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
+                        </td>
+                      </tr>
+                      {isExpanded && (
+                        <tr>
+                          <td colSpan="3" className="p-0">
+                            <div className={`${isDark ? 'bg-slate-950/50 border-slate-800/50' : 'bg-slate-50/50 border-slate-100'} border-y px-16 py-6 shadow-inner`}>
+                              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {productValues.map(v => (
+                                  <div key={v.GiaTriID} className={`flex items-center justify-between p-4 rounded-xl border ${isDark ? 'bg-slate-900/50 border-slate-800/50 hover:border-slate-700' : 'bg-white border-slate-200 hover:border-slate-300'} transition-colors`}>
+                                    <div className="flex flex-col gap-1 w-full mr-4 overflow-hidden">
+                                      <p className={`text-[10px] font-bold uppercase tracking-widest truncate ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>{v.TenThuocTinh}</p>
+                                      <p className={`text-sm font-bold truncate ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>{v.GiaTri}</p>
+                                    </div>
+                                    <button onClick={() => handleDelete(v.GiaTriID)} className="p-2 text-rose-400 hover:bg-rose-400/10 hover:text-rose-500 rounded-lg transition-colors shrink-0" title="Xóa giá trị này">
+                                      <span className="material-symbols-outlined text-sm">delete</span>
+                                    </button>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
                   );
                 })}
               </tbody>
