@@ -66,8 +66,9 @@ def register_error_handlers(app):
 def register_resources(api):
     """Register all Flask-RESTful resources"""
     # Auth resources
-    from app.modules.auth.auth_resource import LoginResource
+    from app.modules.auth.auth_resource import LoginResource, RegisterResource
     api.add_resource(LoginResource, '/api/tta_auth/login')
+    api.add_resource(RegisterResource, '/api/tta_auth/register')
 
     # SanPham resources
     from app.modules.tta_sanpham.tta_sanpham_resource import SanPhamListResource, SanPhamResource

@@ -1,18 +1,27 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
-export default function NnhClientHeader({ selectedCategory = '', onSelectCategory }) {
-  // Danh sách các tab danh mục hiển thị trên thanh điều hướng
-  const categories = [
-    { id: '', name: 'Trang chủ' },
-    { id: 'Điện thoại', name: 'Điện thoại' },
-    { id: 'Laptop', name: 'Laptop' },
-    { id: 'Tai nghe', name: 'Tai nghe' },
-    { id: 'Đồng hồ', name: 'Đồng hồ' },
-    { id: 'Phụ kiện', name: 'Phụ kiện' },
-    { id: 'Thiết bị thông minh', name: 'Thiết bị thông minh' },
-    { id: 'Khuyến mãi', name: 'Khuyến mãi' },
-  ];
+export default function NnhClientHeader({ categories = [], selectedCategory = '', onSelectCategory }) {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  // Xây dựng danh sách tab điều hướng động từ danh mục thực tế của Admin
+  const navTabs = categories.length > 0
+    ? [
+      { id: '', name: 'Trang chủ' },
+      ...categories.map(c => ({ id: c.TenDanhMuc || c.G5_TenDanhMuc, name: c.TenDanhMuc || c.G5_TenDanhMuc })),
+      // { id: 'Khuyến mãi', name: 'Khuyến mãi' }
+    ]
+    : [
+      { id: '', name: 'Trang chủ' },
+      { id: 'Điện thoại', name: 'Điện thoại' },
+      { id: 'Laptop', name: 'Laptop' },
+      { id: 'Tai nghe', name: 'Tai nghe' },
+      { id: 'Đồng hồ', name: 'Đồng hồ' },
+      { id: 'Phụ kiện', name: 'Phụ kiện' },
+      { id: 'Thiết bị thông minh', name: 'Thiết bị thông minh' },
+      // { id: 'Khuyến mãi', name: 'Khuyến mãi' },
+    ];
 
   return (
     <header className="w-full bg-white font-['Inter'] select-none border-b border-purple-100/50 sticky top-0 z-50 shadow-sm">
@@ -56,12 +65,30 @@ export default function NnhClientHeader({ selectedCategory = '', onSelectCategor
 
         {/* CÁC NÚT TÁC VỤ (ĐĂNG NHẬP / GIỎ HÀNG) */}
         <div className="flex items-center gap-6">
-          <Link to="/login" className="flex items-center gap-2 text-purple-950 hover:text-purple-600 transition-colors group">
-            <div className="w-9 h-9 rounded-full bg-purple-50 flex items-center justify-center text-purple-700 group-hover:bg-purple-100 transition-colors">
-              <span className="material-symbols-outlined text-lg">person</span>
+          {user ? (
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 text-purple-950">
+                <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 font-bold text-xs">
+                  {user.email?.[0]?.toUpperCase() || 'U'}
+                </div>
+                <span className="text-xs font-semibold hidden lg:block max-w-[120px] truncate" title={user.email}>{user.email}</span>
+              </div>
+              <button
+                onClick={() => { logout(); navigate('/login'); }}
+                className="text-xs font-semibold text-red-600 hover:text-red-700 px-2.5 py-1.5 rounded bg-red-50 hover:bg-red-100 transition-colors whitespace-nowrap"
+                title="Đăng xuất"
+              >
+                Đăng xuất
+              </button>
             </div>
-            <span className="text-sm font-semibold hidden md:block">Đăng nhập</span>
-          </Link>
+          ) : (
+            <Link to="/login" className="flex items-center gap-2 text-purple-950 hover:text-purple-600 transition-colors group">
+              <div className="w-9 h-9 rounded-full bg-purple-50 flex items-center justify-center text-purple-700 group-hover:bg-purple-100 transition-colors">
+                <span className="material-symbols-outlined text-lg">person</span>
+              </div>
+              <span className="text-sm font-semibold hidden md:block">Đăng nhập</span>
+            </Link>
+          )}
 
           <div className="flex items-center gap-2 text-purple-950 hover:text-purple-600 transition-colors cursor-pointer group relative">
             <div className="w-9 h-9 rounded-full bg-purple-50 flex items-center justify-center text-purple-700 group-hover:bg-purple-100 transition-colors relative">
@@ -78,7 +105,7 @@ export default function NnhClientHeader({ selectedCategory = '', onSelectCategor
 
       {/* THANH ĐIỀU HƯỚNG DANH MUC (NAVIGATION TABS) */}
       <div className="max-w-[1320px] mx-auto px-4 md:px-8 flex items-center gap-1 md:gap-2 overflow-x-auto scrollbar-none border-t border-purple-50/50 pt-1">
-        {categories.map((cat) => {
+        {navTabs.map((cat) => {
           const isActive = selectedCategory.toLowerCase() === cat.id.toLowerCase();
           return (
             <button
@@ -88,11 +115,10 @@ export default function NnhClientHeader({ selectedCategory = '', onSelectCategor
                   onSelectCategory(cat.id);
                 }
               }}
-              className={`px-4 py-3 text-sm font-semibold whitespace-nowrap transition-all relative ${
-                isActive
-                  ? 'text-purple-700 font-bold'
-                  : 'text-purple-950/70 hover:text-purple-950'
-              }`}
+              className={`px-4 py-3 text-sm font-semibold whitespace-nowrap transition-all relative ${isActive
+                ? 'text-purple-700 font-bold'
+                : 'text-purple-950/70 hover:text-purple-950'
+                }`}
             >
               {cat.name}
               {/* ĐƯỜNG GẠCH CHÂN ĐÁNH DẤU TAB ĐANG HOẠT ĐỘNG */}

@@ -63,6 +63,15 @@ class LoginSchema(Schema):
     email = fields.Email(required=True)
     password = fields.Str(required=True, validate=validate.Length(min=1))
 
+class RegisterSchema(Schema):
+    """Schema for register"""
+    class Meta:
+        unknown = EXCLUDE
+    email = fields.Email(required=True)
+    password = fields.Str(required=True, validate=validate.Length(min=1))
+    name = fields.Str(required=True, validate=validate.Length(min=1, max=255))
+    phone = fields.Str(validate=validate.Length(max=20), allow_none=True)
+
 class DonHangCreateSchema(Schema):
     """Schema for creating an order"""
     MaNguoiDung = fields.Int(required=True)

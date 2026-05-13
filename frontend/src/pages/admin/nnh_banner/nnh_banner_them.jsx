@@ -10,6 +10,11 @@ export default function NnhBannerThem() {
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState(null);
   const [categories, setCategories] = useState([]);
+  const getImageUrl = (path) => {
+    if (!path) return '';
+    if (path.startsWith('http')) return path;
+    return `http://localhost:5000${path}`;
+  };
   const [formData, setFormData] = useState({
     MaDanhMuc: '',
     TieuDe: '',
@@ -98,7 +103,7 @@ export default function NnhBannerThem() {
               <div className="relative aspect-video w-full bg-slate-950 rounded-xl border-2 border-dashed border-slate-800 flex flex-col items-center justify-center overflow-hidden group">
                 {(preview || formData.UrlAnh) ? (
                   <>
-                    <img src={preview || formData.UrlAnh} alt="Preview" className="w-full h-full object-cover" />
+                    <img src={preview || getImageUrl(formData.UrlAnh)} alt="Preview" className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                        <label className="cursor-pointer bg-white text-black px-4 py-2 rounded-lg font-bold text-sm shadow">Chọn ảnh khác</label>
                     </div>

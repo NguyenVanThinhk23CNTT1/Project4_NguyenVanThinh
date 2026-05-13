@@ -8,6 +8,12 @@ export default function NnhBannerList() {
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const getImageUrl = (path) => {
+    if (!path) return '';
+    if (path.startsWith('http')) return path;
+    return `http://localhost:5000${path}`;
+  };
+
   const fetchBanners = async () => {
     setLoading(true);
     try {
@@ -115,7 +121,7 @@ export default function NnhBannerList() {
                       <td className="px-6 py-4 w-48">
                         <div className="w-40 h-20 rounded-lg overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center">
                           {item.UrlAnh ? (
-                            <img src={item.UrlAnh} alt={item.TieuDe} className="w-full h-full object-cover" />
+                            <img src={getImageUrl(item.UrlAnh)} alt={item.TieuDe} className="w-full h-full object-cover" />
                           ) : (
                             <span className="material-symbols-outlined text-slate-600">broken_image</span>
                           )}
