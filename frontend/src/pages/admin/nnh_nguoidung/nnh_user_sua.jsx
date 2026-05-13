@@ -45,7 +45,9 @@ export default function TtaUserSua() {
       alert("Cập nhật thông tin thành công!");
       navigate('/admin/user');
     } catch (err) {
-      alert("Lỗi khi cập nhật: " + (err.response?.data?.message || err.message));
+      const msg = err.response?.data?.message;
+      const errorText = typeof msg === 'object' ? JSON.stringify(msg) : (msg || err.message);
+      alert("Lỗi khi cập nhật: " + errorText);
     } finally {
       setSaving(false);
     }

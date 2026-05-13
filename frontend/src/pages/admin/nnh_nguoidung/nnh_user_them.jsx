@@ -23,7 +23,9 @@ export default function TtaUserThem() {
       alert("Thêm người dùng thành công!");
       navigate('/admin/user');
     } catch (err) {
-      alert("Lỗi khi thêm: " + (err.response?.data?.message || err.message));
+      const msg = err.response?.data?.message;
+      const errorText = typeof msg === 'object' ? JSON.stringify(msg) : (msg || err.message);
+      alert("Lỗi khi thêm: " + errorText);
     } finally {
       setLoading(false);
     }

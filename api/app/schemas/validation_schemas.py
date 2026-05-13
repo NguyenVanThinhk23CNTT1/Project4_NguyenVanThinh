@@ -36,21 +36,21 @@ class DanhMucUpdateSchema(Schema):
 
 class NguoiDungCreateSchema(Schema):
     """Schema for creating a user"""
-    TenDangNhap = fields.Str(required=True, validate=validate.Length(min=3, max=50))
-    MatKhau = fields.Str(required=True, validate=validate.Length(min=6))
+    TenDangNhap = fields.Str(validate=validate.Length(min=3, max=50), allow_none=True)
+    MatKhau = fields.Str(required=True, validate=validate.Length(min=1))
     HoTen = fields.Str(required=True, validate=validate.Length(min=1, max=255))
     Email = fields.Email(required=True)
-    SoDienThoai = fields.Str(validate=validate.Length(max=20))
+    SDT = fields.Str(validate=validate.Length(max=20), allow_none=True)
     DiaChi = fields.Str(allow_none=True)
-    VaiTro = fields.Str(validate=validate.OneOf(['admin', 'user']), load_default='user')
+    VaiTro = fields.Str(validate=validate.OneOf(['admin', 'user', 'customer']), load_default='user')
 
 class NguoiDungUpdateSchema(Schema):
     """Schema for updating a user"""
     HoTen = fields.Str(validate=validate.Length(min=1, max=255))
     Email = fields.Email()
-    SoDienThoai = fields.Str(validate=validate.Length(max=20))
+    SDT = fields.Str(validate=validate.Length(max=20), allow_none=True)
     DiaChi = fields.Str(allow_none=True)
-    VaiTro = fields.Str(validate=validate.OneOf(['admin', 'user']))
+    VaiTro = fields.Str(validate=validate.OneOf(['admin', 'user', 'customer']))
 
 class LoginSchema(Schema):
     """Schema for login"""
