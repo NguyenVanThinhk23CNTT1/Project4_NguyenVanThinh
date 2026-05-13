@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, validate, ValidationError
+from marshmallow import Schema, fields, validate, ValidationError, EXCLUDE
 
 class SanPhamCreateSchema(Schema):
     """Schema for creating a product"""
@@ -36,6 +36,8 @@ class DanhMucUpdateSchema(Schema):
 
 class NguoiDungCreateSchema(Schema):
     """Schema for creating a user"""
+    class Meta:
+        unknown = EXCLUDE
     TenDangNhap = fields.Str(validate=validate.Length(min=3, max=50), allow_none=True)
     MatKhau = fields.Str(required=True, validate=validate.Length(min=1))
     HoTen = fields.Str(required=True, validate=validate.Length(min=1, max=255))
@@ -43,14 +45,18 @@ class NguoiDungCreateSchema(Schema):
     SDT = fields.Str(validate=validate.Length(max=20), allow_none=True)
     DiaChi = fields.Str(allow_none=True)
     VaiTro = fields.Str(validate=validate.OneOf(['admin', 'user', 'customer']), load_default='user')
+    Status = fields.Str(allow_none=True)
 
 class NguoiDungUpdateSchema(Schema):
     """Schema for updating a user"""
+    class Meta:
+        unknown = EXCLUDE
     HoTen = fields.Str(validate=validate.Length(min=1, max=255))
     Email = fields.Email()
     SDT = fields.Str(validate=validate.Length(max=20), allow_none=True)
     DiaChi = fields.Str(allow_none=True)
     VaiTro = fields.Str(validate=validate.OneOf(['admin', 'user', 'customer']))
+    Status = fields.Str(allow_none=True)
 
 class LoginSchema(Schema):
     """Schema for login"""
