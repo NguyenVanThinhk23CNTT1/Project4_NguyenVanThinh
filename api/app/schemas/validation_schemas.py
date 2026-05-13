@@ -71,6 +71,28 @@ class DonHangCreateSchema(Schema):
     DiaChiGiaoHang = fields.Str(required=True)
     GhiChu = fields.Str(allow_none=True)
 
+class BannerCreateSchema(Schema):
+    """Schema for creating a banner"""
+    class Meta:
+        unknown = EXCLUDE
+    MaDanhMuc = fields.Int(allow_none=True)
+    TieuDe = fields.Str(validate=validate.Length(max=255), allow_none=True)
+    MoTa = fields.Str(allow_none=True)
+    UrlAnh = fields.Str(required=True)
+    LinkRedirect = fields.Str(validate=validate.Length(max=500), allow_none=True)
+    TrangThai = fields.Int(validate=validate.OneOf([0, 1]), load_default=1)
+
+class BannerUpdateSchema(Schema):
+    """Schema for updating a banner"""
+    class Meta:
+        unknown = EXCLUDE
+    MaDanhMuc = fields.Int(allow_none=True)
+    TieuDe = fields.Str(validate=validate.Length(max=255), allow_none=True)
+    MoTa = fields.Str(allow_none=True)
+    UrlAnh = fields.Str()
+    LinkRedirect = fields.Str(validate=validate.Length(max=500), allow_none=True)
+    TrangThai = fields.Int(validate=validate.OneOf([0, 1]))
+
 def validate_schema(schema_class):
     """Decorator to validate request data against a schema"""
     def decorator(f):

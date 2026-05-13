@@ -32,9 +32,11 @@ def create_app(config_name=None):
     from app.routes.client.tta_sanpham_route import sanpham_client_bp
     from app.routes.client.tta_danhmuc_route import danhmuc_client_bp
     from app.routes.client.tta_donhang_route import donhang_client_bp
+    from app.routes.client.tta_banner_route import banner_client_bp
     app.register_blueprint(sanpham_client_bp, url_prefix="/api/client/tta_sanpham")
     app.register_blueprint(danhmuc_client_bp, url_prefix="/api/client/tta_danhmuc")
     app.register_blueprint(donhang_client_bp, url_prefix="/api/client/tta_donhang")
+    app.register_blueprint(banner_client_bp, url_prefix="/api/client/tta_banner")
 
     @app.route("/api/health")
     def health():
@@ -162,6 +164,11 @@ def register_resources(api):
     # Upload resources
     from app.modules.tta_upload.upload_resource import UploadResource
     api.add_resource(UploadResource, '/api/upload')
+
+    # Banner resources
+    from app.modules.tta_banner.tta_banner_resource import BannerListResource, BannerResource
+    api.add_resource(BannerListResource, '/api/tta_banner')
+    api.add_resource(BannerResource, '/api/tta_banner/<int:id>')
 
     # TODO: Register other resources as they are refactored
     

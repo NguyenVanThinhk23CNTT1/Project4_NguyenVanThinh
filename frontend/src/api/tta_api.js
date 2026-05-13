@@ -10,3 +10,4 @@ export * from './admin/tta_danhgia.api';
 export * from './admin/tta_voucher.api';
 export * from './admin/tta_dashboard.api';
 export * from './admin/tta_upload.api';
+export * from './admin/tta_banner.api';

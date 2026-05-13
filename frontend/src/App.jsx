@@ -18,6 +18,9 @@ import NnhDanhMucList from './pages/admin/nnh_danhmuc/nnh_danhmuc_list';
 import NnhDanhMucThem from './pages/admin/nnh_danhmuc/nnh_danhmuc_them';
 import NnhDanhMucSua from './pages/admin/nnh_danhmuc/nnh_danhmuc_sua';
 import NnhDanhMucXoa from './pages/admin/nnh_danhmuc/nnh_danhmuc_xoa';
+import NnhBannerList from './pages/admin/nnh_banner/nnh_banner_list';
+import NnhBannerThem from './pages/admin/nnh_banner/nnh_banner_them';
+import NnhBannerSua from './pages/admin/nnh_banner/nnh_banner_sua';
 import NnhSanPhamList from './pages/admin/nnh_sanpham/nnh_sanpham_list';
 import NnhSanPhamThem from './pages/admin/nnh_sanpham/nnh_sanpham_them';
 import NnhSanPhamSua from './pages/admin/nnh_sanpham/nnh_sanpham_sua';
@@ -104,6 +107,9 @@ export default function App() {
             <Route path="danh-muc/them"       element={<NnhDanhMucThem />} />
             <Route path="danh-muc/edit/:ma"   element={<NnhDanhMucSua />} />
             <Route path="danh-muc/delete/:ma" element={<NnhDanhMucXoa />} />
+            <Route path="banner"              element={<NnhBannerList />} />
+            <Route path="banner/them"         element={<NnhBannerThem />} />
+            <Route path="banner/edit/:ma"     element={<NnhBannerSua />} />
             <Route path="san-pham"            element={<NnhSanPhamList />} />
             <Route path="san-pham/them"       element={<NnhSanPhamThem />} />
             <Route path="san-pham/edit/:ma"   element={<NnhSanPhamSua />} />

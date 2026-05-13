@@ -8,6 +8,7 @@ const navGroups = [
     items: [
       { to: '/admin/dashboard', icon: 'dashboard', label: 'Tổng quan' },
       { to: '/admin/danh-muc',  icon: 'folder', label: 'Danh mục' },
+      { to: '/admin/banner',    icon: 'view_carousel', label: 'Banner' },
       { to: '/admin/san-pham',  icon: 'inventory_2', label: 'Sản phẩm' },
       { to: '/admin/user',      icon: 'group', label: 'Người dùng' },
       { to: '/admin/don-hang',  icon: 'local_shipping', label: 'Đơn hàng' },
