@@ -293,3 +293,16 @@ giohangtam = Table(
     Column('G5_MaSanPham', Integer, ForeignKey('G5_sanpham.G5_MaSanPham')),
     Column('G5_SoLuong', Integer),
 )
+
+# Table G5_banner
+banner = Table(
+    'G5_banner', metadata,
+    Column('G5_BannerID', Integer, primary_key=True, autoincrement=True),
+    Column('G5_MaDanhMuc', Integer, ForeignKey('G5_danhmuc.G5_MaDanhMuc')),
+    Column('G5_TieuDe', Unicode(255)),
+    Column('G5_MoTa', UnicodeText),
+    Column('G5_UrlAnh', UnicodeText),
+    Column('G5_LinkRedirect', String(500)),
+    Column('G5_TrangThai', Integer, default=1),
+    Column('G5_NgayTao', DateTime, default=datetime.utcnow),
+)
