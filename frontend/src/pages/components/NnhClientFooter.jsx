@@ -10,7 +10,7 @@ export default function NnhClientFooter() {
             <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-700">
               <span className="material-symbols-outlined text-base">devices</span>
             </div>
-            <h2 className="text-purple-950 text-xl font-bold font-['Space_Grotesk']">TechZone</h2>
+            <h2 className="text-purple-950 text-xl font-bold font-['Space_Grotesk']">Zenith Ztore</h2>
           </div>
           <p className="text-on-surface-variant text-sm mb-6">Nơi hội tụ của những đỉnh cao công nghệ toàn cầu.</p>
           <div className="flex gap-4">
@@ -63,7 +63,7 @@ export default function NnhClientFooter() {
       </div>
       
       <div className="max-w-[1280px] mx-auto mt-12 pt-8 border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p className="text-xs text-on-surface-variant">© 2026 TechZone. Mọi quyền được bảo lưu.</p>
+        <p className="text-xs text-on-surface-variant">© 2026 Zenith Ztore. Mọi quyền được bảo lưu.</p>
         <div className="flex gap-6 text-xs text-on-surface-variant">
           <a className="hover:text-secondary" href="#">Điều khoản dịch vụ</a>
           <a className="hover:text-secondary" href="#">Chính sách bảo mật</a>

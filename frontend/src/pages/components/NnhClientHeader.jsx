@@ -36,7 +36,7 @@ export default function NnhClientHeader({ selectedCategory = '', onSelectCategor
             <span className="material-symbols-outlined text-xl">devices</span>
           </div>
           <span className="text-xl md:text-2xl font-extrabold tracking-tight text-purple-950 font-['Space_Grotesk']">
-            Tech<span className="text-purple-600">Zone</span>
+            Zenith <span className="text-purple-600">Ztore</span>
           </span>
         </Link>
 
