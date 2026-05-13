@@ -28,6 +28,14 @@ def create_app(config_name=None):
     # Register resources
     register_resources(api)
 
+    # Register client blueprints
+    from app.routes.client.tta_sanpham_route import sanpham_client_bp
+    from app.routes.client.tta_danhmuc_route import danhmuc_client_bp
+    from app.routes.client.tta_donhang_route import donhang_client_bp
+    app.register_blueprint(sanpham_client_bp, url_prefix="/api/client/tta_sanpham")
+    app.register_blueprint(danhmuc_client_bp, url_prefix="/api/client/tta_danhmuc")
+    app.register_blueprint(donhang_client_bp, url_prefix="/api/client/tta_donhang")
+
     @app.route("/api/health")
     def health():
         return {"status": "ok", "message": "Backend standardized structure with Flask-RESTful and SQLAlchemy Core is fully operational!"}

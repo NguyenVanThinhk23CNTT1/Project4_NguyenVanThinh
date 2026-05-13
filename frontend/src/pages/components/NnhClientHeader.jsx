@@ -1,51 +1,104 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function NnhClientHeader() {
+export default function NnhClientHeader({ selectedCategory = '', onSelectCategory }) {
+  const categories = [
+    { id: '', name: 'Trang chủ' },
+    { id: 'Điện thoại', name: 'Điện thoại' },
+    { id: 'Laptop', name: 'Laptop' },
+    { id: 'Tai nghe', name: 'Tai nghe' },
+    { id: 'Đồng hồ', name: 'Đồng hồ' },
+    { id: 'Phụ kiện', name: 'Phụ kiện' },
+    { id: 'Thiết bị thông minh', name: 'Thiết bị thông minh' },
+    { id: 'Khuyến mãi', name: 'Khuyến mãi' },
+  ];
+
   return (
-    <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#eaecf1] px-4 md:px-8 py-3 bg-white w-full gap-4">
-      {/* LEFT */}
-      <div className="flex items-center gap-8">
-        <Link to="/" className="flex items-center gap-4 text-[#111318]">
-          <div className="size-6 text-secondary">
-            <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-              <path d="M44 4H30.6666V17.3334H17.3334V30.6666H4V44H44V4Z" fill="currentColor"></path>
-            </svg>
+    <header className="w-full bg-white font-['Inter'] select-none border-b border-purple-100/50 sticky top-0 z-50 shadow-sm">
+      {/* TOP BAR */}
+      <div className="w-full bg-[#fdfcff] border-b border-purple-50 py-2 px-4 md:px-12 flex justify-between items-center text-xs text-purple-950/70 font-medium">
+        <div className="flex items-center gap-2">
+          <span className="material-symbols-outlined text-purple-600 text-sm">local_shipping</span>
+          <span>Miễn phí giao hàng cho đơn từ 500k</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="material-symbols-outlined text-purple-600 text-sm">verified_user</span>
+          <span>Bảo hành chính hãng 12 tháng</span>
+        </div>
+      </div>
+
+      {/* MAIN HEADER */}
+      <div className="max-w-[1320px] mx-auto px-4 md:px-8 py-4 flex items-center justify-between gap-4 md:gap-8">
+        {/* LOGO */}
+        <Link to="/" className="flex items-center gap-3 group cursor-pointer" onClick={() => onSelectCategory?.('')}>
+          <div className="w-10 h-10 rounded-full bg-purple-100 border border-purple-200 flex items-center justify-center text-purple-700 group-hover:scale-105 transition-transform shadow-inner">
+            <span className="material-symbols-outlined text-xl">devices</span>
           </div>
-          <h2 className="text-[#111318] text-lg font-bold leading-tight tracking-[-0.015em]">Zenith Zhop</h2>
+          <span className="text-xl md:text-2xl font-extrabold tracking-tight text-purple-950 font-['Space_Grotesk']">
+            Tech<span className="text-purple-600">Zone</span>
+          </span>
         </Link>
-        <div className="hidden md:flex items-center gap-9">
-          <a className="text-[#111318] text-sm font-medium leading-normal hover:text-secondary transition-colors" href="#">Sản phẩm</a>
-          <a className="text-[#111318] text-sm font-medium leading-normal hover:text-secondary transition-colors" href="#">Khuyến mãi</a>
-        </div>
-      </div>
 
-      {/* CENTER */}
-      <div className="flex-1 flex justify-center max-w-[400px] w-full mx-auto">
-        <label className="hidden sm:flex flex-col w-full h-10">
-          <div className="flex w-full flex-1 items-stretch rounded-lg h-full shadow-sm">
-            <div className="text-[#5d6a89] flex border-none bg-[#eaecf1] items-center justify-center pl-4 rounded-l-lg border-r-0">
-              <span className="material-symbols-outlined">search</span>
-            </div>
-            <input className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111318] focus:outline-0 focus:ring-2 focus:ring-secondary/20 border-none bg-[#eaecf1] h-full placeholder:text-[#5d6a89] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal" placeholder="Tìm kiếm sản phẩm..." readOnly/>
+        {/* SEARCH BAR */}
+        <div className="flex-1 max-w-xl hidden sm:block">
+          <div className="relative flex items-center w-full h-11 bg-purple-50/60 hover:bg-purple-50 border border-purple-100/80 rounded-full px-4 transition-all focus-within:bg-white focus-within:border-purple-400 focus-within:shadow-md">
+            <input
+              type="text"
+              placeholder="Bạn cần tìm sản phẩm gì?"
+              className="w-full bg-transparent border-none outline-none text-sm text-purple-950 placeholder-purple-400/80 pr-12"
+            />
+            <button className="absolute right-1.5 w-8 h-8 rounded-full bg-purple-100 hover:bg-purple-600 hover:text-white text-purple-700 flex items-center justify-center transition-colors">
+              <span className="material-symbols-outlined text-base">search</span>
+            </button>
           </div>
-        </label>
+        </div>
+
+        {/* ACTIONS */}
+        <div className="flex items-center gap-6">
+          <Link to="/login" className="flex items-center gap-2 text-purple-950 hover:text-purple-600 transition-colors group">
+            <div className="w-9 h-9 rounded-full bg-purple-50 flex items-center justify-center text-purple-700 group-hover:bg-purple-100 transition-colors">
+              <span className="material-symbols-outlined text-lg">person</span>
+            </div>
+            <span className="text-sm font-semibold hidden md:block">Đăng nhập</span>
+          </Link>
+
+          <div className="flex items-center gap-2 text-purple-950 hover:text-purple-600 transition-colors cursor-pointer group relative">
+            <div className="w-9 h-9 rounded-full bg-purple-50 flex items-center justify-center text-purple-700 group-hover:bg-purple-100 transition-colors relative">
+              <span className="material-symbols-outlined text-lg">shopping_cart</span>
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-purple-600 text-white rounded-full text-[10px] font-bold flex items-center justify-center shadow-sm animate-pulse">
+                2
+              </span>
+            </div>
+            <span className="text-sm font-semibold hidden md:block">Giỏ hàng</span>
+          </div>
+        </div>
       </div>
 
-      {/* RIGHT */}
-      <div className="flex items-center gap-4 md:gap-8 justify-end">
-        <div className="hidden md:flex items-center gap-9">
-          <a className="text-[#111318] text-sm font-medium leading-normal hover:text-secondary transition-colors" href="#">Tin tức</a>
-          <a className="text-[#111318] text-sm font-medium leading-normal hover:text-secondary transition-colors" href="#">Hỗ trợ</a>
-        </div>
-        <div className="flex gap-2">
-          <button className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-[#eaecf1] text-[#111318] gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5 hover:bg-surface-container-high transition-colors">
-            <span className="material-symbols-outlined">shopping_cart</span>
-          </button>
-          <Link to="/login" className="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-[#eaecf1] text-[#111318] gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5 hover:bg-surface-container-high transition-colors">
-            <span className="material-symbols-outlined">person</span>
-          </Link>
-        </div>
+      {/* NAVIGATION TABS */}
+      <div className="max-w-[1320px] mx-auto px-4 md:px-8 flex items-center gap-1 md:gap-2 overflow-x-auto scrollbar-none border-t border-purple-50/50 pt-1">
+        {categories.map((cat) => {
+          const isActive = selectedCategory.toLowerCase() === cat.id.toLowerCase();
+          return (
+            <button
+              key={cat.name}
+              onClick={() => {
+                if (onSelectCategory) {
+                  onSelectCategory(cat.id);
+                }
+              }}
+              className={`px-4 py-3 text-sm font-semibold whitespace-nowrap transition-all relative ${
+                isActive
+                  ? 'text-purple-700 font-bold'
+                  : 'text-purple-950/70 hover:text-purple-950'
+              }`}
+            >
+              {cat.name}
+              {isActive && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-600 rounded-t-full layout-id-tab-indicator" />
+              )}
+            </button>
+          );
+        })}
       </div>
     </header>
   );
