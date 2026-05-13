@@ -9,7 +9,6 @@ const TtaProtectedRoute = ({ children }) => {
     return <Navigate to="/login" replace />;
   }
   
-  // Basic check for demo
   return children;
 };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import ProtectedRoute from './components/TtaProtectedRoute';
+import ProtectedRoute from './routes/TtaProtectedRoute';
 
 // --- LAYOUTS ---
 import AdminLayout from './layouts/AdminLayout'; // Đường dẫn mới
