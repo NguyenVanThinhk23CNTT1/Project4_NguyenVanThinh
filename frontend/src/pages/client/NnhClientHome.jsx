@@ -5,11 +5,14 @@ import NnhClientFooter from '../components/NnhClientFooter';
 import { shopApi } from '../../api/client/tta_shop.api';
 
 export default function NnhClientHome() {
+  // Trạng thái lưu trữ danh sách sản phẩm lấy từ API
   const [products, setProducts] = useState([]);
+  // Trạng thái tải dữ liệu (loading)
   const [loading, setLoading] = useState(true);
+  // Trạng thái danh mục đang được chọn để lọc sản phẩm
   const [selectedCategory, setSelectedCategory] = useState('');
 
-  // Fetch products from API
+  // Hàm gọi API lấy danh sách sản phẩm công khai khi trang được tải
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -22,7 +25,7 @@ export default function NnhClientHome() {
         }
       } catch (err) {
         console.error('Lỗi lấy sản phẩm công khai:', err);
-        // Fallback mock products if API fails
+        // Dữ liệu sản phẩm mẫu (fallback) trong trường hợp không kết nối được API
         setProducts([
           {
             G5_MaSP: 1,
@@ -73,19 +76,19 @@ export default function NnhClientHome() {
     fetchProducts();
   }, []);
 
-  // Format image helper
+  // Hàm hỗ trợ chuẩn hóa đường dẫn hình ảnh sản phẩm
   const getImageUrl = (path) => {
     if (!path) return 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?q=80&w=600&auto=format&fit=crop';
     if (path.startsWith('http')) return path;
     return `http://localhost:5000${path}`;
   };
 
-  // Price formatter
+  // Hàm định dạng giá tiền tệ Việt Nam Đồng (VND)
   const formatPrice = (price) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };
 
-  // Categories list matching mockup circles
+  // Cấu trúc danh sách danh mục hiển thị dạng biểu tượng tròn theo bản thiết kế
   const categoriesList = [
     { name: 'Điện thoại', icon: 'smartphone', img: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=200&auto=format&fit=crop' },
     { name: 'Laptop', icon: 'laptop_mac', img: 'https://images.unsplash.com/photo-1496181130329-d50675f07ac5?q=80&w=200&auto=format&fit=crop' },
@@ -97,27 +100,27 @@ export default function NnhClientHome() {
     { name: 'Máy tính bảng', icon: 'tablet_mac', img: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?q=80&w=200&auto=format&fit=crop' },
   ];
 
-  // Filter products by active category tab
+  // Lọc sản phẩm theo danh mục đang được người dùng chọn
   const filteredProducts = selectedCategory
     ? products.filter((p) => p.G5_TenDanhMuc?.toLowerCase().includes(selectedCategory.toLowerCase()) || p.G5_TenSP?.toLowerCase().includes(selectedCategory.toLowerCase()))
     : products;
 
-  // Custom Add To Cart handler with gorgeous visual feedback
+  // Xử lý sự kiện khi người dùng bấm nút "Thêm vào giỏ hàng"
   const handleAddToCart = (product) => {
     alert(`Đã thêm "${product.G5_TenSP}" vào giỏ hàng thành công!`);
   };
 
   return (
     <div className="min-h-screen bg-white font-['Inter'] flex flex-col selection:bg-purple-100 text-slate-800">
-      {/* HEADER WITH CATEGORY SELECTION */}
+      {/* PHẦN HEADER & THANH CHỌN DANH MỤC TÍCH HỢP ĐỒNG BỘ */}
       <NnhClientHeader selectedCategory={selectedCategory} onSelectCategory={setSelectedCategory} />
 
-      {/* MAIN CONTAINER */}
+      {/* KHU VỰC NỘI DUNG CHÍNH (MAIN CONTENT) */}
       <main className="flex-1 max-w-[1320px] w-full mx-auto px-4 md:px-8 py-6 space-y-10">
-        {/* HERO BANNERS SECTION (Shown on Home / Empty category) */}
+        {/* KHU VỰC BANNER HERO NỔI BẬT (Chỉ hiển thị ở Trang chủ khi không chọn danh mục cụ thể) */}
         {!selectedCategory && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* MAIN LEFT BANNER */}
+            {/* BANNER CHÍNH BÊN TRÁI (SẢN PHẨM HOT) */}
             <div className="lg:col-span-2 relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#7c3aed] via-[#6d28d9] to-[#4c1d95] p-8 md:p-12 flex flex-col justify-between shadow-xl min-h-[380px] group">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_50%)]" />
               
@@ -146,7 +149,7 @@ export default function NnhClientHome() {
                 </div>
               </div>
 
-              {/* FLOATING PRODUCT IMAGE ON RIGHT */}
+              {/* HÌNH ẢNH SẢN PHẨM NỔI BẬT NẰM Ở GÓC PHẢI BANNER */}
               <div className="absolute right-[-40px] bottom-[-20px] w-[55%] h-full max-w-[340px] hidden sm:block transition-transform duration-700 group-hover:scale-105">
                 <img
                   src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?q=80&w=600&auto=format&fit=crop"
@@ -156,9 +159,9 @@ export default function NnhClientHome() {
               </div>
             </div>
 
-            {/* RIGHT SIDE BANNERS STACK */}
+            {/* CÁC BANNER KHUYẾN MÃI XẾP DỌC BÊN PHẢI */}
             <div className="flex flex-col gap-6 justify-between">
-              {/* TOP RIGHT BANNER */}
+              {/* BANNER PHỤ TRÊN (AIRPODS) */}
               <div className="flex-1 relative overflow-hidden rounded-2xl bg-[#f3e8ff] p-6 flex items-center justify-between group cursor-pointer border border-purple-100 hover:shadow-md transition-all">
                 <div className="space-y-3 relative z-10 max-w-[150px]">
                   <h3 className="font-bold text-purple-950 text-lg leading-tight font-['Space_Grotesk']">
@@ -186,7 +189,7 @@ export default function NnhClientHome() {
                 </div>
               </div>
 
-              {/* BOTTOM RIGHT BANNER */}
+              {/* BANNER PHỤ DƯỚI (APPLE WATCH) */}
               <div className="flex-1 relative overflow-hidden rounded-2xl bg-[#e0e7ff] p-6 flex items-center justify-between group cursor-pointer border border-indigo-100 hover:shadow-md transition-all">
                 <div className="space-y-3 relative z-10 max-w-[150px]">
                   <h3 className="font-bold text-indigo-950 text-lg leading-tight font-['Space_Grotesk']">
@@ -217,7 +220,7 @@ export default function NnhClientHome() {
           </div>
         )}
 
-        {/* TRUST BADGES / FEATURES SECTION */}
+        {/* THANH CAM KẾT CHẤT LƯỢNG (TRUST BADGES / FEATURES) */}
         <div className="bg-[#f8f5ff] border border-purple-100 rounded-2xl p-6 flex flex-wrap items-center justify-between gap-6 shadow-sm">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center">
@@ -260,7 +263,7 @@ export default function NnhClientHome() {
           </div>
         </div>
 
-        {/* CATEGORIES HORIZONTAL ROW */}
+        {/* DANH SÁCH DANH MỤC TRÒN NỔI BẬT (CIRCULAR CATEGORIES) */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold text-slate-900 font-['Space_Grotesk']">Danh mục sản phẩm</h2>
@@ -281,6 +284,7 @@ export default function NnhClientHome() {
                   onClick={() => setSelectedCategory(isSelected ? '' : cat.name)}
                   className="flex flex-col items-center gap-2 cursor-pointer group text-center"
                 >
+                  {/* HÌNH ẢNH HOẶC ICON DANH MỤC BO TRÒN */}
                   <div
                     className={`w-16 h-16 rounded-full overflow-hidden flex items-center justify-center transition-all duration-300 border-2 ${
                       isSelected
@@ -296,6 +300,7 @@ export default function NnhClientHome() {
                       </span>
                     )}
                   </div>
+                  {/* TÊN DANH MỤC */}
                   <span
                     className={`text-xs transition-colors line-clamp-1 px-1 ${
                       isSelected ? 'font-bold text-purple-700' : 'font-medium text-slate-600 group-hover:text-purple-600'
@@ -309,7 +314,7 @@ export default function NnhClientHome() {
           </div>
         </div>
 
-        {/* PRODUCTS GRID SECTION */}
+        {/* LƯỚI SẢN PHẨM BÁN CHẠY HOẶC SẢN PHẨM ĐƯỢC LỌC (PRODUCTS GRID) */}
         <div className="space-y-6 pt-4">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <h2 className="text-xl font-bold text-slate-900 font-['Space_Grotesk'] flex items-center gap-2">
@@ -325,6 +330,7 @@ export default function NnhClientHome() {
                 </>
               )}
             </h2>
+            {/* NÚT XÓA BỘ LỌC KHI ĐANG LỌC THEO DANH MỤC */}
             {selectedCategory && (
               <button
                 onClick={() => setSelectedCategory('')}
@@ -335,6 +341,7 @@ export default function NnhClientHome() {
             )}
           </div>
 
+          {/* HIỂN THỊ LƯỚI SẢN PHẨM TRÊN GIAO DIỆN */}
           {loading ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 animate-pulse">
               {[...Array(4)].map((_, i) => (
@@ -343,6 +350,7 @@ export default function NnhClientHome() {
             </div>
           ) : filteredProducts.length === 0 ? (
             <div className="py-16 text-center space-y-3 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+              {/* TRƯỜNG HỢP KHÔNG TÌM THẤY SẢN PHẨM TRONG DANH MỤC */}
               <span className="material-symbols-outlined text-4xl text-slate-400">inventory_2</span>
               <p className="text-slate-500 text-sm font-medium">Không tìm thấy sản phẩm nào trong danh mục này.</p>
               <button
@@ -354,12 +362,14 @@ export default function NnhClientHome() {
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {/* DANH SÁCH THẺ SẢN PHẨM */}
               {filteredProducts.map((prod, index) => {
-                // Determine mock badge discount based on index to match mockup premium feel
+                // Tự động phân bổ phần trăm giảm giá mẫu cao cấp cho từng sản phẩm
                 const discountPills = ['-10%', '-20%', '-15%', '-20%'];
                 const badgeText = prod.discount || discountPills[index % discountPills.length];
                 const discountRate = parseInt(badgeText.replace('-', '').replace('%', '')) / 100 || 0.1;
                 const price = prod.G5_Gia || 15000000;
+                // Tính toán giá gốc dựa trên tỷ lệ giảm giá
                 const oldPrice = price / (1 - discountRate);
 
                 return (
@@ -367,12 +377,12 @@ export default function NnhClientHome() {
                     key={prod.G5_MaSP || index}
                     className="group bg-white border border-slate-100/80 hover:border-purple-200 rounded-2xl p-4 flex flex-col justify-between shadow-sm hover:shadow-xl transition-all duration-300 relative overflow-hidden"
                   >
-                    {/* DISCOUNT PILL */}
+                    {/* HUY HIỆU GIẢM GIÁ (DISCOUNT PILL) */}
                     <span className="absolute top-3 left-3 px-2 py-0.5 bg-purple-600 text-white font-bold text-[10px] rounded tracking-wide z-10 shadow-sm">
                       {badgeText}
                     </span>
 
-                    {/* IMAGE SECTION */}
+                    {/* KHU VỰC HÌNH ẢNH SẢN PHẨM CÓ HIỆU ỨNG ZOOM KHI HOVER */}
                     <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-slate-50 flex items-center justify-center p-2 mb-3">
                       <img
                         src={getImageUrl(prod.G5_HinhAnh)}
@@ -381,8 +391,9 @@ export default function NnhClientHome() {
                       />
                     </div>
 
-                    {/* PRODUCT DETAILS */}
+                    {/* THÔNG TIN CHI TIẾT SẢN PHẨM */}
                     <div className="space-y-2 flex-1 flex flex-col justify-between">
+                      {/* TÊN SẢN PHẨM TỐI ĐA 2 DÒNG */}
                       <h3
                         title={prod.G5_TenSP}
                         className="font-bold text-xs md:text-sm text-slate-800 line-clamp-2 group-hover:text-purple-600 transition-colors leading-snug cursor-pointer"
@@ -390,17 +401,20 @@ export default function NnhClientHome() {
                         {prod.G5_TenSP}
                       </h3>
 
+                      {/* KHU VỰC GIÁ VÀ NÚT THÊM VÀO GIỎ HÀNG */}
                       <div className="flex items-end justify-between pt-2">
                         <div>
+                          {/* GIÁ KHUYẾN MÃI (CHÍNH) */}
                           <p className="text-purple-600 font-extrabold text-sm md:text-base font-['Space_Grotesk'] leading-none">
                             {formatPrice(price)}
                           </p>
+                          {/* GIÁ GỐC BỊ GẠCH NGANG */}
                           <p className="text-slate-400 line-through text-[10px] md:text-xs pt-1">
                             {formatPrice(oldPrice)}
                           </p>
                         </div>
 
-                        {/* ADD TO CART BUTTON */}
+                        {/* NÚT THÊM VÀO GIỎ HÀNG HÌNH TRÒN */}
                         <button
                           onClick={() => handleAddToCart(prod)}
                           title="Thêm vào giỏ hàng"
@@ -418,7 +432,7 @@ export default function NnhClientHome() {
         </div>
       </main>
 
-      {/* FOOTER */}
+      {/* PHẦN CHÂN TRANG (FOOTER) */}
       <NnhClientFooter />
     </div>
   );
