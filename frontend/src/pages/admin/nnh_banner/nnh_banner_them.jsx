@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { bannerApi, danhmucApi } from '../../../api/tta_api';
+import { bannerApi, danhmucApi, uploadApi } from '../../../api/tta_api';
 import { useAdminTheme } from '../../../hooks/useAdminTheme';
 
 export default function NnhBannerThem() {
   const isDark = useAdminTheme();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [preview, setPreview] = useState(null);
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     MaDanhMuc: '',
@@ -29,6 +31,29 @@ export default function NnhBannerThem() {
     fetchCategories();
   }, []);
 
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Hiển thị xem trước ảnh ngay lập tức
+    const reader = new FileReader();
+    reader.onloadend = () => setPreview(reader.result);
+    reader.readAsDataURL(file);
+
+    // Tải ảnh qua API upload chung của hệ thống
+    setUploading(true);
+    try {
+      const res = await uploadApi.uploadImage(file);
+      const uploadedUrl = res.data.data.url;
+      setFormData(prev => ({ ...prev, UrlAnh: uploadedUrl }));
+    } catch (err) {
+      alert("Lỗi khi tải ảnh lên từ thiết bị!");
+      console.error(err);
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -50,92 +75,77 @@ export default function NnhBannerThem() {
 
   return (
     <div className={`p-8 min-h-[calc(100vh-64px)] ${isDark ? 'bg-slate-950 text-slate-200' : 'bg-slate-50 text-slate-800'} transition-colors duration-300 font-['Inter'] flex flex-col items-center justify-center`}>
-      <div className={`w-full max-w-2xl ${isDark ? 'bg-slate-900/70 border-slate-800 shadow-black/50' : 'bg-white border-slate-200 shadow-xl'} backdrop-blur-md rounded-3xl overflow-hidden border shadow-2xl`}>
-        <div className={`p-8 border-b ${isDark ? 'border-slate-800 bg-slate-900/40' : 'border-slate-100 bg-slate-50/50'}`}>
-          <h3 className={`font-['Space_Grotesk'] text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-900'} flex items-center gap-3`}>
-            <span className="material-symbols-outlined text-blue-500 text-3xl">add_photo_alternate</span>
-            Thêm Banner Mới
-          </h3>
-          <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'} mt-1`}>Định cấu hình hình ảnh và liên kết danh mục động cho banner.</p>
+      <div className={`w-full max-w-4xl ${isDark ? 'bg-slate-900/70 border-slate-800 shadow-black/50' : 'bg-white border-slate-200 shadow-xl'} backdrop-blur-md rounded-3xl overflow-hidden border shadow-2xl`}>
+        <div className={`p-8 border-b ${isDark ? 'border-slate-800 bg-slate-900/40' : 'border-slate-100 bg-slate-50/50'} flex items-center justify-between`}>
+          <div>
+            <h3 className={`font-['Space_Grotesk'] text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-900'} flex items-center gap-3`}>
+              <span className="material-symbols-outlined text-blue-500 text-3xl">add_photo_alternate</span>
+              Thêm Banner Mới
+            </h3>
+            <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'} mt-1`}>Tải lên hình ảnh từ ổ đĩa và gán cho các danh mục sản phẩm.</p>
+          </div>
+          <button onClick={() => navigate('/admin/banner')} className={`w-10 h-10 rounded-full ${isDark ? 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white' : 'bg-white border-slate-200 text-slate-600'} border flex items-center justify-center transition-colors`}>
+            <span className="material-symbols-outlined">close</span>
+          </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-8 space-y-6">
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Danh mục liên kết</label>
-              <select 
-                className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-blue-400'} outline-none transition-all`}
-                value={formData.MaDanhMuc}
-                onChange={e => setFormData({...formData, MaDanhMuc: e.target.value})}
-              >
-                <option value="">-- Mặc định (Hiển thị cho tất cả danh mục) --</option>
-                {categories.map(dm => (
-                  <option key={dm.MaDanhMuc} value={dm.MaDanhMuc}>
-                    {dm.TenDanhMuc}
-                  </option>
-                ))}
-              </select>
-              <p className="text-[10px] text-slate-500">Nếu để mặc định, banner sẽ xuất hiện khi người dùng xem toàn bộ sản phẩm.</p>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Đường dẫn hình ảnh (URL)</label>
-              <input 
-                required
-                type="text"
-                className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-blue-400'} outline-none transition-all`}
-                placeholder="https://example.com/banner.jpg"
-                value={formData.UrlAnh}
-                onChange={e => setFormData({...formData, UrlAnh: e.target.value})}
-              />
-            </div>
-
-            {formData.UrlAnh && (
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Xem trước hình ảnh</label>
-                <div className="w-full h-32 rounded-xl overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center">
-                  <img src={formData.UrlAnh} alt="Preview" className="w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none'; }} />
-                </div>
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-8 p-8">
+          {/* Cột trái: Tải ảnh & Trạng thái */}
+          <div className="space-y-6">
+            <div className={`p-6 rounded-2xl border ${isDark ? 'bg-slate-950/50 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Hình Ảnh Banner</label>
+              
+              <div className="relative aspect-video w-full bg-slate-950 rounded-xl border-2 border-dashed border-slate-800 flex flex-col items-center justify-center overflow-hidden group">
+                {(preview || formData.UrlAnh) ? (
+                  <>
+                    <img src={preview || formData.UrlAnh} alt="Preview" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                       <label className="cursor-pointer bg-white text-black px-4 py-2 rounded-lg font-bold text-sm shadow">Chọn ảnh khác</label>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-center p-4">
+                    <span className="material-symbols-outlined text-slate-600 text-4xl mb-2">cloud_upload</span>
+                    <p className="text-xs text-slate-400 font-bold">Click để tải ảnh từ thiết bị</p>
+                    <p className="text-[10px] text-slate-600 mt-1">Hỗ trợ mọi thư mục trên ổ đĩa</p>
+                  </div>
+                )}
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleFileChange}
+                  className="absolute inset-0 opacity-0 cursor-pointer"
+                />
+                {uploading && (
+                  <div className="absolute inset-0 bg-slate-950/80 flex items-center justify-center backdrop-blur-sm">
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                      <span className="text-[10px] text-blue-400 font-bold animate-pulse">Đang tải ảnh lên...</span>
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
 
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Tiêu đề Banner</label>
-              <input 
-                type="text"
-                className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-blue-400'} outline-none transition-all`}
-                placeholder="Khuyến mãi cực sốc mùa hè..."
-                value={formData.TieuDe}
-                onChange={e => setFormData({...formData, TieuDe: e.target.value})}
-              />
+              <div className="mt-4">
+                <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Hoặc đường dẫn ảnh (URL)</label>
+                <input 
+                  required
+                  type="text"
+                  className={`w-full px-3 py-2 rounded-lg border text-xs ${isDark ? 'bg-slate-900 border-slate-800 text-slate-300 focus:border-blue-500' : 'bg-white border-slate-300 text-slate-800'} outline-none transition-all`}
+                  placeholder="URL hình ảnh sau khi tải..."
+                  value={formData.UrlAnh}
+                  onChange={e => {
+                    setFormData({...formData, UrlAnh: e.target.value});
+                    setPreview(null);
+                  }}
+                />
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Mô tả ngắn</label>
-              <textarea 
-                rows="2"
-                className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-blue-400'} outline-none transition-all resize-none`}
-                placeholder="Nhập thông điệp kèm theo..."
-                value={formData.MoTa}
-                onChange={e => setFormData({...formData, MoTa: e.target.value})}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Link chuyển hướng khi click (Tùy chọn)</label>
-              <input 
-                type="text"
-                className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-blue-400'} outline-none transition-all`}
-                placeholder="https://example.com/promotion"
-                value={formData.LinkRedirect}
-                onChange={e => setFormData({...formData, LinkRedirect: e.target.value})}
-              />
-            </div>
-
-            <div className={`flex items-center justify-between p-4 rounded-2xl border ${isDark ? 'border-slate-800 bg-slate-950/30' : 'border-slate-200 bg-slate-50'}`}>
+            <div className={`p-4 rounded-2xl border ${isDark ? 'border-slate-800 bg-slate-950/30' : 'border-slate-200 bg-slate-50'} flex items-center justify-between`}>
                <div>
-                  <p className={`text-sm font-bold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>Kích hoạt ngay</p>
-                  <p className="text-[10px] text-slate-500 uppercase font-bold tracking-tighter">Cho phép hiển thị banner trên hệ thống</p>
+                  <p className={`text-sm font-bold ${isDark ? 'text-slate-200' : 'text-slate-900'}`}>Trạng thái</p>
+                  <p className="text-[10px] text-slate-500 uppercase font-bold tracking-tighter">Hiển thị ngay</p>
                </div>
                <button 
                   type="button"
@@ -147,28 +157,81 @@ export default function NnhBannerThem() {
             </div>
           </div>
 
-          <div className="pt-4 flex items-center justify-end gap-4">
-            <button 
-              type="button" 
-              onClick={() => navigate('/admin/banner')} 
-              className={`px-6 py-3 rounded-xl font-bold text-sm transition-all ${isDark ? 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-700'}`}
-            >
-              Hủy
-            </button>
-            <button 
-              type="submit" 
-              disabled={loading}
-              className="px-8 py-3 bg-blue-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-900/20 hover:bg-blue-500 active:scale-95 transition-all flex items-center gap-2"
-            >
-              {loading ? (
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              ) : (
-                <>
-                  <span className="material-symbols-outlined text-lg">save</span>
-                  Lưu Banner
-                </>
-              )}
-            </button>
+          {/* Cột phải: Thông tin liên kết & Nội dung */}
+          <div className="md:col-span-2 space-y-4">
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Danh mục hiển thị</label>
+              <select 
+                className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-blue-400'} outline-none transition-all`}
+                value={formData.MaDanhMuc}
+                onChange={e => setFormData({...formData, MaDanhMuc: e.target.value})}
+              >
+                <option value="">-- Mặc định (Áp dụng chung cho tất cả) --</option>
+                {categories.map(dm => (
+                  <option key={dm.MaDanhMuc} value={dm.MaDanhMuc}>
+                    {dm.TenDanhMuc}
+                  </option>
+                ))}
+              </select>
+              <p className="text-[10px] text-slate-500">Banner sẽ tự động thay đổi khi khách hàng bấm vào danh mục tương ứng trên trang chủ.</p>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Tiêu đề Banner</label>
+              <input 
+                type="text"
+                className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-blue-400'} outline-none transition-all`}
+                placeholder="Khuyến mãi cực sốc..."
+                value={formData.TieuDe}
+                onChange={e => setFormData({...formData, TieuDe: e.target.value})}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Mô tả thông điệp</label>
+              <textarea 
+                rows="3"
+                className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-blue-400'} outline-none transition-all resize-none`}
+                placeholder="Nhập nội dung thông điệp quảng cáo..."
+                value={formData.MoTa}
+                onChange={e => setFormData({...formData, MoTa: e.target.value})}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Link đích khi click (URL chuyển hướng)</label>
+              <input 
+                type="text"
+                className={`w-full px-4 py-3 rounded-xl border ${isDark ? 'bg-slate-950 border-slate-800 text-white focus:border-blue-500' : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-blue-400'} outline-none transition-all`}
+                placeholder="https://example.com/san-pham-hot"
+                value={formData.LinkRedirect}
+                onChange={e => setFormData({...formData, LinkRedirect: e.target.value})}
+              />
+            </div>
+
+            <div className="pt-4 flex items-center justify-end gap-4">
+              <button 
+                type="button" 
+                onClick={() => navigate('/admin/banner')} 
+                className={`px-6 py-3 rounded-xl font-bold text-sm transition-all ${isDark ? 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-700'}`}
+              >
+                Hủy
+              </button>
+              <button 
+                type="submit" 
+                disabled={loading || uploading}
+                className="px-8 py-3 bg-blue-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-blue-900/20 hover:bg-blue-500 active:scale-95 disabled:bg-slate-800 transition-all flex items-center gap-2"
+              >
+                {loading ? (
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                ) : (
+                  <>
+                    <span className="material-symbols-outlined text-lg">cloud_done</span>
+                    Hoàn tất tải lên
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </form>
       </div>
