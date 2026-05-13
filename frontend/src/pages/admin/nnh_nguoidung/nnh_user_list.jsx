@@ -44,7 +44,7 @@ export default function TtaUserList() {
             Bộ lọc
           </button>
           <button className={`flex items-center gap-2 px-4 py-2 border ${isDark ? 'border-slate-800 text-slate-300 hover:bg-slate-900' : 'border-slate-200 text-slate-600 hover:bg-white'} rounded-lg text-sm font-medium transition-colors`}>
-            <span class="material-symbols-outlined text-lg">download</span>
+            <span className="material-symbols-outlined text-lg">download</span>
             Xuất CSV
           </button>
         </div>
