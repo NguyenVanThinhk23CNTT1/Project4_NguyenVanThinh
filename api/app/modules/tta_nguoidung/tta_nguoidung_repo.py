@@ -45,6 +45,11 @@ def get_by_id(ma):
         return None
 
 def create(data):
+    check_stmt = select(user).where(user.c.G5_Email == data['Email'])
+    with engine.connect() as conn:
+        if conn.execute(check_stmt).fetchone():
+            raise ValueError("Email này đã tồn tại trong hệ thống. Vui lòng sử dụng email khác.")
+
     stmt = insert(user).values(
         G5_HoTen=data['HoTen'],
         G5_Email=data['Email'],

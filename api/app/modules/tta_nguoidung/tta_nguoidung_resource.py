@@ -19,8 +19,11 @@ class NguoiDungListResource(Resource):
     @validate_schema(NguoiDungCreateSchema)
     def post(self):
         data = request.validated_data
-        service.create_user(data)
-        return response_success(message="Thêm người dùng thành công.")
+        try:
+            service.create_user(data)
+            return response_success(message="Thêm người dùng thành công.")
+        except ValueError as e:
+            return response_error(str(e), 400)
 
 class NguoiDungResource(Resource):
     @jwt_required()
